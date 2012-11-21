@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import wx
-import sys
+#import sys
 import os
 import matplotlib
 matplotlib.use('WXAgg')
@@ -10,10 +10,10 @@ from matplotlib.backends.backend_wxagg import \
     FigureCanvasWxAgg as FigCanvas, \
     NavigationToolbar2WxAgg as NavigationToolbar
 from matplotlib import rc
-from matplotlib import colors, cm
-from matplotlib.collections import LineCollection
-from matplotlib.backends.backend_pdf import PdfPages
-import numpy as np
+#from matplotlib import colors, cm
+#from matplotlib.collections import LineCollection
+#from matplotlib.backends.backend_pdf import PdfPages
+#import numpy as np
 #import matplotlib.pylab as plt
 import matplotlib.lines as lns
 from mpl_toolkits.mplot3d import Axes3D
