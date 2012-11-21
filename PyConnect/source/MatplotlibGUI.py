@@ -25,21 +25,14 @@ rc('text', usetex=True)
 rc('font', family='serif')
 
 
-class DGCanvasFrame(wx.Frame):
-    def __init__(self,disc,parent=None,id=-1):
+class DGCanvasFrame():
+    def __init__(self,disc):
         
-        super(DGCanvasFrame,self).__init__(parent=None,id=-1)
+        super(DGCanvasFrame,self).__init__()
         
         self.disc = disc
-        #self.panel = wx.Panel(self)
-        #self.fig = Figure()
-        #self.ax = self.fig.add_subplot(111)
-        
-        self.create_menu()
-        self.create_status_bar()
-        #    self.add_toolbar()
-        self.create_main_panel()
-        
+   
+        self.init_plot()
                 
     def init_plot(self):
         self.fig = Figure()
@@ -111,49 +104,6 @@ class DGCanvasFrame(wx.Frame):
                 z = self.disc.basin_index['Level'][l]['Energy']      
             self.ax.text(x,z,label)
  
-    def create_menu(self):
-        self.menubar = wx.MenuBar()
-        
-        menu_file = wx.Menu()
- 
-	m_expt = menu_file.Append(-1, "&Save plot\tCtrl-S", "Save plot \
-to file")
-        self.Bind(wx.EVT_MENU, self.on_save_plot, m_expt)
-        menu_file.AppendSeparator()
-        m_exit = menu_file.Append(-1, "E&xit\tCtrl-X", "Exit")
-        self.Bind(wx.EVT_MENU, self.on_exit, m_exit)
-
-        self.menubar.Append(menu_file, "&File")
-	self.SetMenuBar(self.menubar)
-
-
-    def add_toolbar(self):
-        self.toolbar = NavigationToolbar(self.canvas)
-        self.toolbar.Realize()
-
-        self.toolbar.update()
-
-       
-    def create_main_panel(self):
-        self.panel = wx.Panel(self)
-
-        self.init_plot()
-        self.canvas = FigCanvas(self.panel, -1, self.fig)
-        self.add_toolbar()
-#        self.ax.mouse_init()        
-        self.vbox = wx.BoxSizer(wx.VERTICAL)
-        self.vbox.Add(self.canvas, 1, flag=wx.LEFT | wx.TOP | wx.GROW)        
-        self.hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        self.hbox2.Add(self.toolbar, border=5, flag=wx.ALL)
-        self.vbox.Add(self.hbox2, 0, flag=wx.ALIGN_LEFT | wx.TOP)
-        
-        self.panel.SetSizer(self.vbox)
-        self.vbox.Fit(self)
-    
-    def create_status_bar(self):
-        self.statusbar = self.CreateStatusBar()
-
-        
     def PlotDG(self):
         self.plot_list = []
         self.plot_listz = []
