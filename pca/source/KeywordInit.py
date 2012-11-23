@@ -28,6 +28,9 @@ class Keyword():
         
         self.n_atoms = None # No. of atoms in system
         
+        self.points = None  # Location of unformatted-FORTRAN (yawn) co-ordinate
+                            # file
+        
         # basis = 'dihedral'
         self.basis = None
         

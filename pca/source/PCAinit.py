@@ -3,7 +3,7 @@ import os
 import numpy as np
 import array
 import lewismod
-import structure_read
+import structure_reader
 import matplotlib.mlab as mlab
 
 __metaclass__ = type
@@ -63,13 +63,14 @@ class PCAinit():
         if os.path.exists(self.kw.PC_variance):
             sys.exit('WARNING: file "%s" already exists - \nAborting calculation'%self.kw.PC_variance)
         
-        lewismod.file_check('points.min')
-        lewismod.file_check('min.data')
+#        lewismod.file_check('points.min')
+        lewismod.file_check(self.kw.points)
+#        lewismod.file_check('min.data')
         lewismod.file_check(self.kw.min_file)
         self.CountLines()
         
     def CountLines(self):
-        self.total_min = lewismod.count_lines('min.data')
+        self.total_min = lewismod.count_lines(self.kw.min_file)
         print 'No. of minima:%i'%self.total_min
         
     def BasisCheck(self):
@@ -105,7 +106,8 @@ class PCAinit():
             sys.stdout.write("%3.1f%% Structures Read"%(progress))
             sys.stdout.flush()
             self.config_space = np.append(self.config_space, 
-                                          structure_read.structure_read(rec, 
+                                          structure_reader.structure_read(self.kw.points,
+                                                                        rec, 
                                                                         self.kw.n_atoms))
         sys.stdout.write('\r')
         sys.stdout.write('All Structures Read  \n')

@@ -1,6 +1,7 @@
 # hello
-n_atoms 46
-conv 200
-iterations 300
+n_atoms 31
+#conv 1E-7
+#iterations 300
 basis cartesian
-min_file minimaindex
+min_file AGGG-Landscape/minimaindex
+points AGGG-Landscape/points.min
