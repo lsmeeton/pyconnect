@@ -11,7 +11,7 @@ matplotlib.use('WXAgg')
 #    NavigationToolbar2WxAgg as NavigationToolbar
 from matplotlib import rc
 #from matplotlib import colors, cm
-#from matplotlib.collections import LineCollection
+from matplotlib.collections import LineCollection
 #from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 import matplotlib.pylab as plt
@@ -35,6 +35,9 @@ class DGCanvasFrame():
         self.init_plot()
                 
     def init_plot(self):
+        
+        # self.line_array is input for linecollection object
+        self.line_array = []#np.zeros((2,2))
         self.fig = plt.figure()
 
         self.ax = self.fig.add_subplot(111)
@@ -53,7 +56,8 @@ class DGCanvasFrame():
 
         self.IdentifyMin()
             
-
+#        self.ax.set_xlim(-0.5,0.5)
+#        self.ax.set_ylim(-48,-52)
     def FormatAxes(self):
         '''
         Format axes (ie. determine location and add labels)
@@ -105,9 +109,8 @@ class DGCanvasFrame():
             self.ax.text(x,z,label)
  
     def PlotDG(self):
-        self.plot_list = []
-        self.plot_listz = []
-        self.colour_list = []
+        
+
 #        self.plot_listy = []
         for l in self.disc.basin_index['Level']:
             if l == 1: continue
@@ -117,7 +120,10 @@ class DGCanvasFrame():
                 p = self.disc.basin_index['Level'][l]['Basin'][b]\
                     ['Parents']
                 self.LinesDG(l,b,c,p)
-
+#        print 'shape of self.line_array', np.shape(self.line_array)
+#        np.swapaxes(self.line_array, 0, 2)
+#        self.Line = LineCollection(self.line_array)
+#        self.ax.add_collection(self.Line)
 
     def LinesDG(self,l,b,c,p):
         rgb = self.disc.basin_index['Level'][l]['Basin'][b]['RGB']
@@ -134,8 +140,9 @@ class DGCanvasFrame():
         else:
             z2 = self.disc.basin_index['Level'][l]['Energy']      
         self.plot_dataDG = self.ax.plot([x1,x2],[z1,z2], c=rgb, linewidth=0.2)
-
-
+#        self.line_array = np.dstack((self.line_array,np.array([[x1,z1],
+#                                                               [x2,z2]])))
+#        self.line_array.append(np.array([[x1,z1],[x2,z2]]))
     
 class MDGCanvasFrame(wx.Frame):
     def __init__(self,disc,Q,parent=None,id=-1):
@@ -526,12 +533,21 @@ if __name__ == '__main__':
     print 'Initialise disconnect %2.6f'%(t1-t0)
     print 'Total %2.6f'%(t1-t00)
     #disc.GetMetric3D()                                                 
-
+    t0 = time.time()
     print disc.minima_index['Index'][5]
-
+    t1 = time.time()
+    print 'print disc.minima_index %2.6f'%(t1-t0)
+    t0 = time.time()
     DG = DGCanvasFrame(disc)
-    plt.show()
-
+    t1 = time.time()
+    print 'Initialise DGframe %2.6f'%(t1-t0)
+    t0 = time.time()
+#    plt.ylim(-48,-52)
+#    plt.show()
+    plt.savefig("tree.eps",format="eps")
+    t1 = time.time()
+    print 'Initialise disconnect %2.6f'%(t1-t0)
+    
 #    app = wx.PySimpleApp()
 #    if disc.kw.metric3d['present']:
 #        t0 = time.time()

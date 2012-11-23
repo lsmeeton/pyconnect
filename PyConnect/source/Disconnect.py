@@ -7,7 +7,7 @@ import string
 import os
 import sys
 #from KeywordDict import Keywords
-from KeywordInit import Keywords
+#from KeywordInit import Keywords
 #--------------------------------------------------------------------#
 __metaclass__ = type
 
