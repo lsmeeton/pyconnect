@@ -1,0 +1,150 @@
+#!/usr/bin/env python
+
+import unittest
+import numpy as np
+from PCAinit import PCAinit
+from PCAprep import MyPCAprep
+from PCA import PCA
+
+
+class ProductTestCase(unittest.TestCase):
+    
+    def setUp(self):
+        '''
+        The following data is for the BLN 46 model protein with the minimaindex
+        file "~/workspace/PrincipalComponentAnalysis/minimaindex"
+        '''
+        self.n_min = 1342
+        self.n_atoms = 46
+        self.total_min = 132356
+        self.cartesianIn_shape = (self.n_min,3,self.n_atoms)
+        self.initial_shape = 3*self.n_min*self.n_atoms
+        self.cartesianOut_shape = (self.n_min,3*self.n_atoms)
+        self.dihedralIn_shape = (self.n_min,2*(self.n_atoms - 3))
+        
+    def testCountLines(self):
+        pca = PCAinit()
+        #n_min = 132356 # For BLN46 model
+        pca.CountLines()
+        self.assertEqual(pca.total_min, self.total_min, 
+                         'Minima not counted correctly %d %d'
+                         %(pca.total_min, self.total_min))
+        
+    def testCheckBasis(self):
+
+        pca = PCAinit()
+        pca.CheckFiles()
+        pca.basis = 'nothing'
+        with self.assertRaises(RuntimeError):
+            pca.BasisCheck()
+            
+    def testReadMinimaIndex(self):
+        pca = PCAinit()
+        pca.CheckFiles()
+        pca.ReadMinimaIndex()
+        
+        self.assertEqual(pca.n_min, self.n_min, 
+                         "n_min: %d pca.n_min: %d"%(self.n_min, pca.n_min))
+        
+    def testCheckShapeCorrect(self):
+        pca = PCAinit()
+        pca.CheckFiles()
+        pca.ReadMinimaIndex()
+        pca.ReadConfigurationSpace()
+        pca.ShapeCheck()
+        
+        self.assertEqual(pca.shape[0], self.initial_shape, 'Shapes are not equivalent!')
+
+    def testReshapeCartesianIn(self):
+        pca = MyPCAprep()
+        pca.CheckFiles()
+        pca.ReadMinimaIndex()
+        pca.ReadConfigurationSpace()
+        pca.ShapeCheck()
+        pca.basis = 'cartesian'
+        
+        pca.ReshapeCartesianIn()
+        
+        self.assertEqual(pca.shape
+                         , self.cartesianIn_shape,
+                          'Shapes are not equivalent!')
+        
+    def testReshapeCartesianOut(self):
+        pca = MyPCAprep()
+        pca.CheckFiles()
+        pca.ReadMinimaIndex()
+        pca.ReadConfigurationSpace()
+        pca.ShapeCheck()
+        pca.basis = 'cartesian'
+        
+        pca.ReshapeCartesianIn()
+        pca.ReshapeCartesianOut()
+        
+        self.assertEqual(pca.shape
+                         , self.cartesianOut_shape,
+                          'Shapes are not equivalent!')
+        
+    def testReshapeDihedralIn(self):
+        pca = MyPCAprep()
+        pca.CheckFiles()
+        pca.ReadMinimaIndex()
+        pca.ReadConfigurationSpace()
+        pca.ShapeCheck()
+        pca.basis = 'dihedral'
+        
+        pca.ReshapeDihedral()
+        
+        self.assertEqual(pca.shape
+                         , self.dihedralIn_shape,
+                          'Shapes are not equivalent!')
+        
+    def testConvertDihedrals(self):
+        pca = MyPCAprep()
+        pca.n_min = 1
+        pca.n_atoms = 12
+        pca.config_space = np.zeros([pca.n_min,3,pca.n_atoms])
+
+        pca.config_space[0,:,0] = np.array([ 4.586,   3.709,   2.428])
+        pca.config_space[0,:,1] = np.array([ 5.608,   4.439,   1.704])
+        pca.config_space[0,:,2] = np.array([ 5.247,   4.519,   0.227])
+        pca.config_space[0,:,3] = np.array([ 6.144,   5.089,  -0.583])
+        pca.config_space[0,:,4] = np.array([ 7.393,   5.639,  -0.093])
+        pca.config_space[0,:,5] = np.array([ 8.380,   4.509,   0.162])
+        pca.config_space[0,:,6] = np.array([ 9.644,   4.846,   0.436])
+        pca.config_space[0,:,7] = np.array([ 10.117,   6.217,   0.441])
+        pca.config_space[0,:,8] = np.array([ 9.828,   6.860,   1.791])
+        pca.config_space[0,:,9] = np.array([ 10.737,   7.722,   2.256])
+        pca.config_space[0,:,10]= np.array([ 11.982,   7.989,   1.5])
+        pca.config_space[0,:,11]= np.array([ 11.835,   9.243,   0.713])
+ 
+        pca.basis = 'dihedral'
+        
+        print pca.config_space  
+        
+        dihedrals = np.array([np.cos(np.deg2rad(-175.697530)),
+                              np.sin(np.deg2rad(-175.697530)),
+                              np.cos(np.deg2rad(-1.351148)),
+                              np.sin(np.deg2rad(-1.351148)),
+                              np.cos(np.deg2rad(78.228332)),
+                              np.sin(np.deg2rad(78.228332)),
+                              np.cos(np.deg2rad(170.764306)),
+                              np.sin(np.deg2rad(170.764306)),
+                              np.cos(np.deg2rad(-2.804173)),
+                              np.sin(np.deg2rad(-2.804173)),
+                              np.cos(np.deg2rad(84.357578)),
+                              np.sin(np.deg2rad(84.357578)),
+                              np.cos(np.deg2rad(144.048356)),
+                              np.sin(np.deg2rad(144.048356)),
+                              np.cos(np.deg2rad(-3.486604)),
+                              np.sin(np.deg2rad(-3.486604)),
+                              np.cos(np.deg2rad(96.591853)),
+                              np.sin(np.deg2rad(96.591853)),])
+        
+        pca.ConvertDihedrals()
+        
+        #self.assertSequenceEqual(dihedrals, pca.config_space, "Wrong",np.array)
+        print dihedrals
+        print pca.config_space
+        self.assertTrue((dihedrals == pca.config_space).all(), "WRONG")
+                                       
+if __name__ == '__main__': unittest.main()
