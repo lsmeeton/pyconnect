@@ -17,7 +17,8 @@ class Keyword():
         # Initialise attributes
         self.input_file = 'pca_inpt'
         self.conv = 10E-7 # Convergence criteria for rotational invariance 
-        # procedure. By default 10E-7
+        # procedure.
+        # By default 10E-7
         
         self.iterations = 100 # If rotational invariance procedure doesn't 
         # converge within this many iterations, stop calculation.
