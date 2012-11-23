@@ -1,0 +1,18 @@
+trajin linearGGGG.incrd
+
+dihedral dih_1   :1@C  :2@N  :2@CA :2@C out dih_1
+dihedral dih_2   :1@N  :1@CA :1@C  :2@N out dih_2
+dihedral dih_3   :1@CA :1@C  :2@N  :2@CA out dih_3
+
+dihedral dih_4   :2@C  :3@N  :3@CA :3@C out dih_4
+dihedral dih_5   :2@N  :2@CA :2@C  :3@N out dih_5
+dihedral dih_6   :2@CA :2@C  :3@N  :3@CA out dih_6
+
+dihedral dih_7   :3@C  :4@N  :4@CA :4@C out dih_7
+dihedral dih_8   :3@N  :3@CA :3@C  :4@N out dih_8
+dihedral dih_9   :3@CA :3@C  :4@N  :4@CA out dih_9
+
+dihedral dih_10  :4@C  :1@N  :1@CA :1@C out dih_10
+dihedral dih_11  :4@N  :4@CA :4@C  :1@N out dih_11
+dihedral dih_12  :4@CA :4@C  :1@N  :1@CA out dih_12
+

@@ -1,0 +1,5 @@
+# hello
+n_atoms 46
+conv 200
+iterations 300
+basis cartesian
