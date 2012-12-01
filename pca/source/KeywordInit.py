@@ -57,7 +57,7 @@ class Keyword():
         Checks the existence of the file 'file_name'
         '''
         if not os.path.exists(file_name):
-            sys.exit('ERROR: Could not find file %s'%file_name)
+            sys.exit('ERROR: Could not find file "%s"'%file_name)
 
     def InputRead(self):
         '''

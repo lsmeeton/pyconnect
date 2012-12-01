@@ -41,7 +41,7 @@ class PCAinit():
         self.kw.PC_coords_dir_name = 'PC_coords'
         self.kw.PC_project_dir_name = 'PC_projections'
         self.kw.PC_variance = 'PC_variance'
-#        self.CheckFiles()
+#        self.DirectoryCheck()
 #        self.kw.basisCheck()
 #        self.ShapeCheck()
 #        self.ReadMinimaIndex()
@@ -53,25 +53,32 @@ class PCAinit():
     #--------------------------------------------------------------------------#
     # Functions ensuring input is acceptable 
     
-    def CheckFiles(self):
-        try: os.mkdir(self.kw.PC_coords_dir_name)
-        except OSError: sys.exit('WARNING: directory "%s" already exists - \nAborting calculation'%self.kw.PC_coords_dir_name)
-        
-        try: os.mkdir(self.kw.PC_project_dir_name)
-        except OSError: sys.exit('WARNING: directory "%s" already exists - \nAborting calculation'%self.kw.PC_project_dir_name)
+    def DirectoryCheck(self):
+        if os.path.isdir(self.kw.PC_coords_dir_name):
+            sys.exit('WARNING: directory "%s" already exists - \nAborting calculation'
+                     %self.kw.PC_coords_dir_name)
+#        try: os.mkdir(self.kw.PC_coords_dir_name)
+#        except OSError: sys.exit('WARNING: directory "%s" already exists - \nAborting calculation'%self.kw.PC_coords_dir_name)
+        if os.path.isdir(self.kw.PC_project_dir_name):
+            sys.exit('WARNING: directory "%s" already exists - \nAborting calculation'
+                     %self.kw.PC_project_dir_name)
+#        try: os.mkdir(self.kw.PC_project_dir_name)
+#        except OSError: sys.exit('WARNING: directory "%s" already exists - \nAborting calculation'%self.kw.PC_project_dir_name)
         
         if os.path.exists(self.kw.PC_variance):
             sys.exit('WARNING: file "%s" already exists - \nAborting calculation'%self.kw.PC_variance)
         
 #        lewismod.file_check('points.min')
-        lewismod.file_check(self.kw.points)
+#        lewismod.file_check(self.kw.points)
+        self.kw.FileCheck(self.kw.points)
 #        lewismod.file_check('min.data')
-        lewismod.file_check(self.kw.min_file)
+#        lewismod.file_check(self.kw.min_file)
+        self.kw.FileCheck(self.kw.min_file)
         self.CountLines()
         
     def CountLines(self):
         self.total_min = lewismod.count_lines(self.kw.min_file)
-        print 'No. of minima:%i'%self.total_min
+        print 'No. of minima: %i'%self.total_min
         
     def BasisCheck(self):
         if self.kw.basis != 'cartesian':
@@ -154,7 +161,7 @@ class PCAinit():
 
 if __name__ == '__main__':
     pca = PCAinit()
-    pca.CheckFiles()
+    pca.DirectoryCheck()
     pca.BasisCheck()
     
     pca.ReadMinimaIndex()

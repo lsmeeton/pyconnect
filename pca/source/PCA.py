@@ -66,11 +66,11 @@ class PCA(MyPCAprep):
         self.config_space = self.center(self.config_space)
      
         # Calculate the covariance matrix, self.cov
-        self.CalcCov()
+#        self.CalcCov()
         
         # Calculate the eigenvalues self.variance, and eigenvalues self.PCs, of 
         # self.cov
-        self.variance, self.PCs = np.linalg.eigh(self.cov)
+#        self.variance, self.PCs = np.linalg.eigh(self.cov)
         
         # Note, temp_* is because vectors are ordered in c differently than they are in the inbuilt PCA solver
         # Therefore, for the sake of consistency with previously written code, one must re-organise temp_PCs
@@ -81,15 +81,20 @@ class PCA(MyPCAprep):
         #  (||||)    (---LastPC---)
         #
         # They also point in opposite direction, so we have to multiply by -1.0
-        self.Reorder()
+#        self.Reorder()
         
         # Normalise variance
-        self.Normalise()
+#        self.Normalise()
         
-        self.Y = np.dot(self.PCs, self.config_space.T).T
+#        self.Y = np.dot(self.PCs, self.config_space.T).T
  
-        self.Wt = self.PCs
-
+#        self.Wt = self.PCs
+        U, s, Vh = np.linalg.svd(self.config_space, full_matrices=False)
+        self.variance = s**2/float(len(s))
+        self.Normalise()
+        self.Y = np.dot(Vh, self.config_space.T).T
+        self.PCs = Vh
+        
     def Reorder(self):
         '''
         Re-order self.PCs and self.variance to make consistent with legacy code

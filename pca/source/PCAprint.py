@@ -27,13 +27,16 @@ class PCAprint(PCA):
         Components are each written to a seperate file, which are stored within 
         their own directory.
         '''
+        try: os.mkdir(self.kw.PC_coords_dir_name)
+        except OSError: sys.exit('WARNING: directory "%s" already exists - \nAborting calculation'
+                                 %self.kw.PC_coords_dir_name)
         
         for i in range(self.numPCs):
             f = open(self.kw.PC_coords_dir_name + '/' + self.kw.PC_coords_dir_name +
                      '%d'%(i+1), 'w')
             f.write('# Principal Component: %d\n# Fraction of Variance Captured: %2.5f\n'
                     %(i+1,self.norm_variance[i]))
-            for j in range(self.kw.n_atoms):
+            for j in range(0, 3*(self.kw.n_atoms),3):
                 f.write('%2.6f\t%2.6f\t%2.6f\n'
                         %(self.PCs[i,j], self.PCs[i,j+1], self.PCs[i,j+2]))
             f.close()
@@ -44,11 +47,15 @@ class PCAprint(PCA):
         component, PC1, PC2, .. in the file "PC_projections1", "PC_projections2"
         in a two coloumn format: minima    value
         '''
+        try: os.mkdir(self.kw.PC_project_dir_name)
+        except OSError: sys.exit('WARNING: directory "%s" already exists - \nAborting calculation'
+                                 %self.kw.PC_project_dir_name)
+        
         
         for i in range(self.numPCs):
             f = open(self.kw.PC_project_dir_name + '/' + self.kw.PC_project_dir_name +
                      '%d'%(i+1), 'w')
-            f.write('# %d minima projected onto PC%d\nMin\tPC\n'%
+            f.write('# %d minima projected onto PC%d\n# Min\tPC\n'%
                     (self.n_min, (i+1)))
             for j in range(self.n_min):
                 f.write('%d\t%1.6f\n'%(self.min_index[j],self.Y[j,i]))
@@ -70,3 +77,14 @@ class PCAprint(PCA):
                           self.norm_variance[i], self.cum_variance[i]))
             f.close()
             
+    def PrintPCMatrix(self):
+        '''
+        Print self.PCs as a matrix
+        '''
+        f = open('self.PCsMatrix','w')
+        m,n = np.shape(self.PCs)
+        for i in range(m):
+            for j in range(n):
+                f.write('%2.6f\t'%self.PCs[i,j])
+            f.write('\n')
+        f.close()

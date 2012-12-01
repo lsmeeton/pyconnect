@@ -10,7 +10,7 @@ if __name__ == '__main__':
     kw = Keyword()
     pca = PCAprint(kw)
     
-    pca.CheckFiles()
+    pca.DirectoryCheck()
     pca.BasisCheck()
     pca.ShapeCheck()
     pca.ReadMinimaIndex()
@@ -36,3 +36,5 @@ if __name__ == '__main__':
     pca.PrintPCACartesianCoords()
     pca.PrintPCAProjections()
     pca.PrintPCAVariance()
+#    pca.PrintPCMatrix()
+#    print pca.PCs[0,1:3]
