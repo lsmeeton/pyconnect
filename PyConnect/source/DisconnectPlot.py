@@ -23,16 +23,16 @@ class DisconnectPlot(Disconnect):
         
     def PositionBasins(self):
         '''
-        Initalise basin locations, and then either extract postions
+        Initalise basin locations, and then either extract positions
         from file or calculate.
         '''
         pres = self.kw.metric3d['present']
         if self.kw.metric3d['present']:#self.kw.metric3D['present']: 
-#            self.GetMetric3DNewStyle()
-            self.GetMetric3D()
+            self.GetMetric3DNewStyle()
+#            self.GetMetric3D()
         elif self.kw.metric['present']: 
-#            self.GetMetric2DNewStyle()
-            self.GetMetric2D()
+            self.GetMetric2DNewStyle()
+#            self.GetMetric2D()
         print self.kw.trval
         if self.kw.trmin['trmin_file']: self.GetTrminColours()
         elif self.kw.trval['trval_file']: self.GetTrvalColours()
@@ -322,7 +322,7 @@ class DisconnectPlot(Disconnect):
 #                print self.kw.metric3d['metricx_file'] 
                 print('Minimum %d in file "%s" but not in file "%s"'
                       %(m,
-                        self.kw.metric['metric_file'],
+                        self.kw.metric3d['metricx_file'],
                         self.kw.minima['data_file']))
 #                print self.minima_index['Index'][m ]
                 sys.exit()
@@ -457,7 +457,51 @@ class DisconnectPlot(Disconnect):
                 self.basin_index['Level'][l]['Basin'][b]\
                     ['RGB'] = self.map.to_rgba(self.basin_index['Level']
                                           [l]['Basin'][b]['Trval'])
+    def GetTrvalColoursNewStyle(self):
+        '''
+        Reads Trval values from "New Style" order parameter files
+        '''
+        self.col_map = cm.get_cmap('brg_r')
+        
+#        i = 0
 
+        for lines in open(self.kw.trval['trval_file']):
+#            i += 1
+            lines = lines.split()
+            if lines[0] == '#' or len(lines) == 0: continue
+            i = int(lines[0])
+#            print lines
+            if (self.minima_index['Index'].has_key(i)):
+                col = float(lines[1])
+#                print i, col
+                self.minima_index['Index'][i]['Metric']['trval'] = col
+                if col == None: sys.exit('None! %d'%i)
+                # Find max and min values of x for scaling
+                if col > self.basin_index['MaxTrval']: 
+                    self.basin_index['MaxTrval'] = col
+                if col < self.basin_index['MinTrval']:
+                    self.basin_index['MinTrval'] = col
+                
+        self.norm = colors.Normalize(vmin = self.basin_index['MinTrval'],
+                                     vmax = self.basin_index['MaxTrval'])
+        
+        self.map = cm.ScalarMappable(norm = self.norm, 
+                                     cmap = self.col_map)
+        
+        for l in self.basin_index['Level']:
+            for b in self.basin_index['Level'][l]['Basin']:
+                temp = []
+                for m in self.basin_index['Level'][l]['Basin'][b]\
+                    ['Min']:
+                    temp.append(self.minima_index['Index'][m]
+                                ['Metric']['trval'])
+#                print temp
+                self.basin_index['Level'][l]['Basin'][b]\
+                    ['Trval'] = np.mean(temp)
+                    
+                self.basin_index['Level'][l]['Basin'][b]\
+                    ['RGB'] = self.map.to_rgba(self.basin_index['Level']
+                                          [l]['Basin'][b]['Trval'])
 
     def ArangeBasins(self):
         '''

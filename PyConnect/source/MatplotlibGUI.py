@@ -16,7 +16,7 @@ from matplotlib.collections import LineCollection
 import numpy as np
 import matplotlib.pylab as plt
 #import matplotlib.lines as lns
-#from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d import Axes3D
 from KeywordInit import Keywords
 from DisconnectPlot import DisconnectPlot
 import time
@@ -58,6 +58,7 @@ class DGCanvasFrame():
             
 #        self.ax.set_xlim(-0.5,0.5)
 #        self.ax.set_ylim(-48,-52)
+
     def FormatAxes(self):
         '''
         Format axes (ie. determine location and add labels)
@@ -109,8 +110,6 @@ class DGCanvasFrame():
             self.ax.text(x,z,label)
  
     def PlotDG(self):
-        
-
 #        self.plot_listy = []
         for l in self.disc.basin_index['Level']:
             if l == 1: continue
@@ -144,22 +143,18 @@ class DGCanvasFrame():
 #                                                               [x2,z2]])))
 #        self.line_array.append(np.array([[x1,z1],[x2,z2]]))
     
-class MDGCanvasFrame(wx.Frame):
-    def __init__(self,disc,Q,parent=None,id=-1):
+class MDGCanvasFrame():
+    def __init__(self,disc,Q):
         
-        super(MDGCanvasFrame,self).__init__(parent=None,id=-1)
+        
         self.Q = Q
         self.disc = disc
-        
-        self.create_menu()
-        self.create_status_bar()
-
-        self.create_main_panel()
-        
+      
+        self.init_plot()
         
                 
     def init_plot(self):
-        self.fig = Figure()
+        self.fig = plt.figure()
 
         self.ax = self.fig.add_subplot(111)
         
@@ -201,55 +196,13 @@ class MDGCanvasFrame(wx.Frame):
 
         if self.disc.kw['energy_label']['label']: 
             self.ax.set_ylabel(self.disc.kw['energy_label']['label'])
-            
-        if self.disc.kw['q1']['label']:
-            self.ax.set_xlabel(self.disc.kw['q1']['label'])
-            
         
-
-    def create_menu(self):
-        self.menubar = wx.MenuBar()
-        
-        menu_file = wx.Menu()
- 
-        m_expt = menu_file.Append(-1, "&Save plot\tCtrl-S", "Save plot \
-to file")
-        self.Bind(wx.EVT_MENU, self.on_save_plot, m_expt)
-        menu_file.AppendSeparator()
-        m_exit = menu_file.Append(-1, "E&xit\tCtrl-X", "Exit")
-        self.Bind(wx.EVT_MENU, self.on_exit, m_exit)
-
-        self.menubar.Append(menu_file, "&File")
-        self.SetMenuBar(self.menubar)
-
-
-    def add_toolbar(self):
-        self.toolbar = NavigationToolbar(self.canvas)
-        self.toolbar.Realize()
- 
-        self.toolbar.update()
-
-       
-    def create_main_panel(self):
-        self.panel = wx.Panel(self)
-
-        self.init_plot()
-        self.canvas = FigCanvas(self.panel, -1, self.fig)
-        self.add_toolbar()
-#        self.ax.mouse_init()        
-        self.vbox = wx.BoxSizer(wx.VERTICAL)
-        self.vbox.Add(self.canvas, 1, flag=wx.LEFT | wx.TOP | wx.GROW)        
-        self.hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        self.hbox2.Add(self.toolbar, border=5, flag=wx.ALL)
-        self.vbox.Add(self.hbox2, 0, flag=wx.ALIGN_LEFT | wx.TOP)
-        
-        self.panel.SetSizer(self.vbox)
-        self.vbox.Fit(self)
-    
-    def create_status_bar(self):
-        self.statusbar = self.CreateStatusBar()
-
-
+        if self.Q == 'X':    
+            if self.disc.kw['q1']['label']:
+                self.ax.set_xlabel(self.disc.kw['q1']['label'])
+        else:
+            if self.disc.kw['q2']['label']:
+                self.ax.set_xlabel(self.disc.kw['q2']['label'])
 
     def PlotMDG(self):
         for l in self.disc.basin_index['Level']:
@@ -282,40 +235,18 @@ to file")
         self.plot_dataMDG = self.ax.plot([x1,x2],[z1,z2], color =rgb,
                                                 linewidth=0.2)
     
-    def on_save_plot(self, event):
-        file_choices = "PS (*.ps)|*.ps"
-        
-        dlg = wx.FileDialog(
-            self, 
-            message="Save plot as...",
-            defaultDir=os.getcwd(),
-            defaultFile="plot.ps",
-            wildcard=file_choices,
-            style=wx.SAVE)
-        
-        if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-            self.canvas.print_figure(path, dpi=self.dpi)
-            self.flash_status_message("Saved to %s" % path)
-    
-    def on_exit(self, event):
-        self.Destroy()
-        
-class MDG3DCanvasFrame(wx.Frame):
-    def __init__(self,disc,parent=None,id=-1):
-        
-        super(MDG3DCanvasFrame,self).__init__(parent=None,id=-1)
+
+class MDG3DCanvasFrame():
+    def __init__(self,disc):
+
         
         self.disc = disc
 
-        self.create_menu()
-        self.create_status_bar()
-
-        self.create_main_panel()
+        self.init_plot()
         
                 
     def init_plot(self):
-        self.fig = Figure()
+        self.fig = plt.figure()
 
 
         self.ax = self.fig.add_subplot(111, projection='3d')
@@ -350,49 +281,7 @@ class MDG3DCanvasFrame(wx.Frame):
             self.ax.set_ylabel(self.disc.kw['q2']['label'])
 
 
-    def create_menu(self):
-        self.menubar = wx.MenuBar()
-        
-        menu_file = wx.Menu()
- 
-        m_expt = menu_file.Append(-1, "&Save plot\tCtrl-S", "Save plot \
-to file")
-        self.Bind(wx.EVT_MENU, self.on_save_plot, m_expt)
-        menu_file.AppendSeparator()
-        m_exit = menu_file.Append(-1, "E&xit\tCtrl-X", "Exit")
-        self.Bind(wx.EVT_MENU, self.on_exit, m_exit)
-
-        self.menubar.Append(menu_file, "&File")
-        self.SetMenuBar(self.menubar)
-
-
-    def add_toolbar(self):
-        self.toolbar = NavigationToolbar(self.canvas)
-        self.toolbar.Realize()
-  
-        self.toolbar.update()
-
-       
-    def create_main_panel(self):
-        self.panel = wx.Panel(self)
-
-        self.init_plot()
-        self.canvas = FigCanvas(self.panel, -1, self.fig)
-        self.add_toolbar()
-        self.ax.mouse_init()        
-        self.vbox = wx.BoxSizer(wx.VERTICAL)
-        self.vbox.Add(self.canvas, 1, flag=wx.LEFT | wx.TOP | wx.GROW)        
-        self.hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        self.hbox2.Add(self.toolbar, border=5, flag=wx.ALL)
-        self.vbox.Add(self.hbox2, 0, flag=wx.ALIGN_LEFT | wx.TOP)
-        
-        self.panel.SetSizer(self.vbox)
-        self.vbox.Fit(self)
-    
-    def create_status_bar(self):
-        self.statusbar = self.CreateStatusBar()
-
-
+   
     def PlotMDG(self):
         for l in self.disc.basin_index['Level']:
             if l == 1: continue
@@ -437,26 +326,6 @@ to file")
         self.plot_dataMDG = self.ax.plot([x1,x2],[y1,y2],[z1,z2], color =rgb,
                                                 linewidth=0.2)
     
-    def on_save_plot(self, event):
-        file_choices = "PS (*.ps)|*.ps"
-        
-        dlg = wx.FileDialog(
-            self, 
-            message="Save plot as...",
-            defaultDir=os.getcwd(),
-            defaultFile="plot.ps",
-            wildcard=file_choices,
-            style=wx.SAVE)
-        
-        if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-            self.canvas.print_figure(path, dpi=self.dpi)
-            self.flash_status_message("Saved to %s" % path)
-    
-    def on_exit(self, event):
-        self.Destroy()
-        
-
 
 if __name__ == '__main__':
     t00 = time.time()
@@ -534,7 +403,7 @@ if __name__ == '__main__':
     print 'Total %2.6f'%(t1-t00)
     #disc.GetMetric3D()                                                 
     t0 = time.time()
-    print disc.minima_index['Index'][5]
+#    print disc.minima_index['Index'][5]
     t1 = time.time()
     print 'print disc.minima_index %2.6f'%(t1-t0)
     t0 = time.time()
@@ -547,7 +416,12 @@ if __name__ == '__main__':
     plt.savefig("tree.eps",format="eps")
     t1 = time.time()
     print 'Initialise disconnect %2.6f'%(t1-t0)
-    
+    MDG = MDGCanvasFrame(disc,Q='X')
+    plt.savefig("metrictreeX.eps",format="eps")
+    MDG = MDGCanvasFrame(disc,Q='Y')
+    plt.savefig("metrictreeY.eps",format="eps")
+    MDG = MDG3DCanvasFrame(disc)
+    plt.show()#savefig("metrictree.eps",format="eps")
 #    app = wx.PySimpleApp()
 #    if disc.kw.metric3d['present']:
 #        t0 = time.time()

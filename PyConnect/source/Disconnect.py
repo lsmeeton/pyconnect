@@ -43,7 +43,7 @@ class Disconnect():
          
     def InitialiseMin(self):
         '''
-
+        Initialise 'minima_index'
         '''
         self.minima_index = {} 
         self.ReadMinima(self.kw.minima['data_file'])
