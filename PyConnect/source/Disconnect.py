@@ -157,17 +157,23 @@ class Disconnect():
         Reads TS index, energy and the two minima it links from 
         'file_name'
         '''
-        i = 1
+        i = 0
         self.ts_index['Index'] = {}
         for line in open(file_name, 'r'):
             TS_data = line.split()
-            
-            if int(TS_data[3]) == int(TS_data[4]): continue
-
-            self.ts_index['Index'][i] = dict(Energy = float(TS_data[0]), 
-                                    Min1 = int(TS_data[3]), 
-                                    Min2 = int(TS_data[4]))
             i += 1
+            if int(TS_data[3]) == int(TS_data[4]): continue
+            elif self.kw.tsthresh['tsthresh'] <= float(TS_data[0]): continue
+            elif  not self.minima_index['Index'].has_key(int(TS_data[3])):
+                continue
+            elif  not self.minima_index['Index'].has_key(int(TS_data[4])):
+                continue
+#            if int(TS_data[3]) 
+            else:
+                self.ts_index['Index'][i] = dict(Energy = float(TS_data[0]), 
+                                                 Min1 = int(TS_data[3]), 
+                                                 Min2 = int(TS_data[4]))
+            
 
 #--------------------------------------------------------------------#
 

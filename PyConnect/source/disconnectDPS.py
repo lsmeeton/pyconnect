@@ -12,7 +12,7 @@ from MatplotlibGUI import DGCanvasFrame, MDGCanvasFrame, MDG3DCanvasFrame
 if __name__ == '__main__':
     
     kw = Keywords()
-    
+#    print kw
     disc = DisconnectPlot(kw)
     # Initialisation
     disc.InitialiseMin()
