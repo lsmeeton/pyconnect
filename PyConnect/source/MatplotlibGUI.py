@@ -4,7 +4,7 @@ import wx
 #import sys
 import os
 import matplotlib
-matplotlib.use('WXAgg')
+#matplotlib.use('WXAgg')
 #from matplotlib.figure import Figure
 #from matplotlib.backends.backend_wxagg import \
 #    FigureCanvasWxAgg as FigCanvas, \
@@ -56,8 +56,8 @@ class DGCanvasFrame():
 
         self.IdentifyMin()
             
-#        self.ax.set_xlim(-0.5,0.5)
-#        self.ax.set_ylim(-48,-52)
+        self.ax.set_xlim(-0.5,0.5)
+        self.ax.set_ylim(-52,-48)#(-48,-52)
 
     def FormatAxes(self):
         '''
@@ -110,7 +110,7 @@ class DGCanvasFrame():
             self.ax.text(x,z,label)
  
     def PlotDG(self):
-#        self.plot_listy = []
+        self.plot_listy = []
         for l in self.disc.basin_index['Level']:
             if l == 1: continue
             for b in self.disc.basin_index['Level'][l]['Basin']:
@@ -120,9 +120,9 @@ class DGCanvasFrame():
                     ['Parents']
                 self.LinesDG(l,b,c,p)
 #        print 'shape of self.line_array', np.shape(self.line_array)
-#        np.swapaxes(self.line_array, 0, 2)
-#        self.Line = LineCollection(self.line_array)
-#        self.ax.add_collection(self.Line)
+        np.swapaxes(self.line_array, 0, 2)
+        self.Line = LineCollection(self.line_array)
+        self.ax.add_collection(self.Line)
 
     def LinesDG(self,l,b,c,p):
         rgb = self.disc.basin_index['Level'][l]['Basin'][b]['RGB']
@@ -138,10 +138,10 @@ class DGCanvasFrame():
             z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
         else:
             z2 = self.disc.basin_index['Level'][l]['Energy']      
-        self.plot_dataDG = self.ax.plot([x1,x2],[z1,z2], c=rgb, linewidth=0.2)
+#        self.plot_dataDG = self.ax.plot([x1,x2],[z1,z2], c=rgb, linewidth=0.2)
 #        self.line_array = np.dstack((self.line_array,np.array([[x1,z1],
 #                                                               [x2,z2]])))
-#        self.line_array.append(np.array([[x1,z1],[x2,z2]]))
+        self.line_array.append(np.array([[x1,z1],[x2,z2]]))
     
 class MDGCanvasFrame():
     def __init__(self,disc,Q):
@@ -328,100 +328,63 @@ class MDG3DCanvasFrame():
     
 
 if __name__ == '__main__':
-    t00 = time.time()
     kw = Keywords()
-    t1 = time.time()
-    print 'Keywords %2.6f'%(t1-t00)
-#    print kw
-    t0 = time.time()
+    
     disc = DisconnectPlot(kw)
-    print disc.kw.idmin
-    t1 = time.time()
-    print 'Initialise disconnect %2.6f'%(t1-t0)
-    # Initialisation                          
-    t0 = time.time()                         
+                       
     disc.InitialiseMin()
-    t1 = time.time()
-    print 'Initialise min %2.6f'%(t1-t0)
-    t0 = time.time()
+    
     disc.InitialiseTS()
-    t1 = time.time()
-    print 'Initialise ts %2.6f'%(t1-t0)
-    t0 = time.time()
+    
     disc.CountMin()
-    t1 = time.time()
-    print 'Count min %2.6f'%(t1-t0)
-    t0 = time.time()
+    
     disc.CountTS()
-    t1 = time.time()
-    print 'Count TS %2.6f'%(t1-t0)
-    t0 = time.time()
+    
     disc.RemoveThreshold()
-    t1 = time.time()
-    print 'Remove threshold %2.6f'%(t1-t0)
-    t0 = time.time()
+    
     disc.RemoveUnderConnect()
-    t1 = time.time()
-    print 'Remove under connect %2.6f'%(t1-t0)
-    t0 = time.time()
+    
     disc.RemoveDisjoint()
-    t1 = time.time()
-    print 'Remove disjoint %2.6f'%(t1-t0)
-    t0 = time.time()
+    
     disc.InitialiseBasin()
-    t1 = time.time()
-    print 'Initialise basin %2.6f'%(t1-t0)
-    t0 = time.time()
+    
     disc.AssignBasins()
-    t1 = time.time()
-    print 'Initialise disconnect %2.6f'%(t1-t0)
+    
     disc.PruneBasins()
-    t1 = time.time()
-    print 'assign basin %2.6f'%(t1-t0)
-    t0 = time.time()
+    
     disc.ReNumberBasins()
-    t1 = time.time()
-    print 'renumber basin %2.6f'%(t1-t0)
-    t0 = time.time()
+    
     disc.GgetParentsAndChildren()
-    t1 = time.time()
-    print 'get parents and children %2.6f'%(t1-t0)
-    t0 = time.time()
+    
     disc.GetNodeSize()
-    t1 = time.time()
-    print 'get node size %2.6f'%(t1-t0)
-    t0 = time.time()
-    # End initialisation
+    
     disc.DumpNumbers()
-    t1 = time.time()
-    print 'dump numbers %2.6f'%(t1-t0)
-    t0 = time.time()
-                 
+    
     disc.PositionBasins()
-    t1 = time.time()
-    print 'Initialise disconnect %2.6f'%(t1-t0)
-    print 'Total %2.6f'%(t1-t00)
+    #t1 = time.time()
+    #print 'Initialise disconnect %2.6f'%(#t1-#t0)
+    #print 'Total %2.6f'%(#t1-#t00)
     #disc.GetMetric3D()                                                 
-    t0 = time.time()
-#    print disc.minima_index['Index'][5]
-    t1 = time.time()
-    print 'print disc.minima_index %2.6f'%(t1-t0)
-    t0 = time.time()
-    DG = DGCanvasFrame(disc)
-    t1 = time.time()
-    print 'Initialise DGframe %2.6f'%(t1-t0)
-    t0 = time.time()
+    #t0 = time.time()
+#    #print disc.minima_index['Index'][5]
+    #t1 = time.time()
+    #print '#print disc.minima_index %2.6f'%(#t1-#t0)
+    #t0 = time.time()
+#    DG = DGCanvasFrame(disc)
+    #t1 = time.time()
+    #print 'Initialise DGframe %2.6f'%(#t1-#t0)
+    #t0 = time.time()
 #    plt.ylim(-48,-52)
 #    plt.show()
-    plt.savefig("tree.eps",format="eps")
-    t1 = time.time()
-    print 'Initialise disconnect %2.6f'%(t1-t0)
-    MDG = MDGCanvasFrame(disc,Q='X')
-    plt.savefig("metrictreeX.eps",format="eps")
-    MDG = MDGCanvasFrame(disc,Q='Y')
-    plt.savefig("metrictreeY.eps",format="eps")
-    MDG = MDG3DCanvasFrame(disc)
-    plt.show()#savefig("metrictree.eps",format="eps")
+#    plt.savefig("tree.eps",format="eps")
+    #t1 = time.time()
+    #print 'Initialise disconnect %2.6f'%(#t1-#t0)
+#    MDG = MDGCanvasFrame(disc,Q='X')
+#    plt.savefig("metrictreeX.eps",format="eps")
+#    MDG = MDGCanvasFrame(disc,Q='Y')
+#    plt.savefig("metrictreeY.eps",format="eps")
+#    MDG = MDG3DCanvasFrame(disc)
+#    plt.show()#savefig("metrictree.eps",format="eps")
 #    app = wx.PySimpleApp()
 #    if disc.kw.metric3d['present']:
 #        t0 = time.time()
