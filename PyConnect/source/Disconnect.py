@@ -138,16 +138,19 @@ class Disconnect():
 
     def ReadMinima(self, file_name):
         '''
-        Reads minima index and energy from 'file_name'
+        Reads minima index and energy from 'file_name'. Ignores minima which 
+        have an energy greater than kw.first['E1'].
         '''
-        i = 1
+        i = 0
         self.minima_index['Index'] = {}
         for line in open(file_name, 'r'):
             minima_data = line.split()
-            
-            self.minima_index['Index'][i] =  dict(Energy = float(minima_data[0]))
-            
             i += 1
+            if self.kw.first['E1'] <= float(minima_data[0]): continue
+            else:
+                self.minima_index['Index'][i] =  dict(Energy = float(minima_data[0]))
+            
+            
 
     def ReadTS(self, file_name):
         '''

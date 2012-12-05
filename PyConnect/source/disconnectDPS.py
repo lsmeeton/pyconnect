@@ -12,12 +12,11 @@ from MatplotlibGUI import DGCanvasFrame, MDGCanvasFrame, MDG3DCanvasFrame
 if __name__ == '__main__':
     
     kw = Keywords()
-
+    
     disc = DisconnectPlot(kw)
     # Initialisation
     disc.InitialiseMin()
     disc.InitialiseTS()
-   
     disc.CountMin()
     disc.CountTS()
     disc.RemoveThreshold()
@@ -48,6 +47,7 @@ if __name__ == '__main__':
        
     else:
         DGframe = DGCanvasFrame(disc)
+        plt.savefig("tree.pdf",format="pdf")
 #        plt.show()
 
 #    GUI.MainWin(disc)

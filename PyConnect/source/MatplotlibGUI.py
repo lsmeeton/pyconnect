@@ -120,7 +120,7 @@ class DGCanvasFrame():
                     ['Parents']
                 self.LinesDG(l,b,c,p)
 #        print 'shape of self.line_array', np.shape(self.line_array)
-        np.swapaxes(self.line_array, 0, 2)
+#        np.swapaxes(self.line_array, 0, 2)
         self.Line = LineCollection(self.line_array)
         self.ax.add_collection(self.Line)
 
