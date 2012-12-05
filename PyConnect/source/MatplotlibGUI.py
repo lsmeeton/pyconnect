@@ -38,6 +38,7 @@ class DGCanvasFrame():
         
         # self.line_array is input for linecollection object
         self.line_array = []#np.zeros((2,2))
+        self.rgba_array = []
         self.fig = plt.figure()
 
         self.ax = self.fig.add_subplot(111)
@@ -56,8 +57,7 @@ class DGCanvasFrame():
 
         self.IdentifyMin()
             
-        self.ax.set_xlim(-0.5,0.5)
-        self.ax.set_ylim(-52,-48)#(-48,-52)
+        
 
     def FormatAxes(self):
         '''
@@ -75,6 +75,9 @@ class DGCanvasFrame():
         self.ax.yaxis.set_ticks_position('left')
         if self.disc.kw['energy_label']['label']: 
             self.ax.set_ylabel(self.disc.kw['energy_label']['label'])
+            
+        self.ax.set_xlim(-0.5,0.5)
+        self.ax.set_ylim(self.disc.kw.first['E1'] - (self.disc.kw.levels['n'] + 1)*self.disc.kw.delta['dE'],self.disc.kw.first['E1'])#(-48,-52)
  
     def AddColourBar(self):
         '''
@@ -119,9 +122,9 @@ class DGCanvasFrame():
                 p = self.disc.basin_index['Level'][l]['Basin'][b]\
                     ['Parents']
                 self.LinesDG(l,b,c,p)
-#        print 'shape of self.line_array', np.shape(self.line_array)
+        print 'shape of self.line_array', np.shape(self.line_array), type(self.line_array[0])
 #        np.swapaxes(self.line_array, 0, 2)
-        self.Line = LineCollection(self.line_array)
+        self.Line = LineCollection(self.line_array,color=self.rgba_array)
         self.ax.add_collection(self.Line)
 
     def LinesDG(self,l,b,c,p):
@@ -142,6 +145,7 @@ class DGCanvasFrame():
 #        self.line_array = np.dstack((self.line_array,np.array([[x1,z1],
 #                                                               [x2,z2]])))
         self.line_array.append(np.array([[x1,z1],[x2,z2]]))
+        self.rgba_array.append(rgb)
     
 class MDGCanvasFrame():
     def __init__(self,disc,Q):
