@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
 import unittest
+import sys
+sys.path.append('/home/lewis/git/pyconnect/PyConnect/source/')
+#import mymodule
+
 from Disconnect import Disconnect
 from DisconnectPlot import DisconnectPlot
 from KeywordInit import Keywords

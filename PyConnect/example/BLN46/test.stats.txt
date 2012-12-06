@@ -1,0 +1,58 @@
+Wed Dec  5 15:48:53 2012    test.stats
+
+         3593295 function calls (3569953 primitive calls) in 16.870 seconds
+
+   Ordered by: cumulative time
+   List reduced from 3093 to 50 due to restriction <50>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003   16.872   16.872 ../../source/disconnectDPS.py:3(<module>)
+        1    0.000    0.000   10.191   10.191 ../../source/MatplotlibGUI.py:29(__init__)
+        1    0.000    0.000   10.191   10.191 ../../source/MatplotlibGUI.py:37(init_plot)
+        1    0.015    0.015    9.936    9.936 ../../source/MatplotlibGUI.py:112(PlotDG)
+     2915    0.028    0.000    9.921    0.003 ../../source/MatplotlibGUI.py:127(LinesDG)
+     2915    0.064    0.000    9.893    0.003 /usr/lib/pymodules/python2.7/matplotlib/axes.py:3768(plot)
+     2915    0.166    0.000    4.897    0.002 /usr/lib/pymodules/python2.7/matplotlib/axes.py:1821(autoscale_view)
+        1    2.379    2.379    3.424    3.424 ../../source/Disconnect.py:44(InitialiseMin)
+     6058    1.011    0.000    2.749    0.000 /usr/lib/pymodules/python2.7/matplotlib/transforms.py:99(invalidate)
+     5830    0.023    0.000    2.736    0.000 /usr/lib/pymodules/python2.7/matplotlib/axes.py:314(_grab_next_args)
+     2915    0.083    0.000    2.707    0.001 /usr/lib/pymodules/python2.7/matplotlib/axes.py:278(_plot_args)
+     2915    0.066    0.000    2.152    0.001 /usr/lib/pymodules/python2.7/matplotlib/axes.py:1450(add_line)
+     2915    0.026    0.000    2.081    0.001 /usr/lib/pymodules/python2.7/matplotlib/axes.py:2354(set_xbound)
+     2915    0.046    0.000    2.023    0.001 /usr/lib/pymodules/python2.7/matplotlib/axes.py:250(_makeline)
+     3041    0.216    0.000    1.971    0.001 /usr/lib/pymodules/python2.7/matplotlib/lines.py:128(__init__)
+     2915    0.069    0.000    1.968    0.001 /usr/lib/pymodules/python2.7/matplotlib/axes.py:2385(set_xlim)
+     2915    0.025    0.000    1.906    0.001 /usr/lib/pymodules/python2.7/matplotlib/axes.py:2569(set_ybound)
+     2915    0.062    0.000    1.793    0.001 /usr/lib/pymodules/python2.7/matplotlib/axes.py:2600(set_ylim)
+     2915    0.050    0.000    1.437    0.000 /usr/lib/pymodules/python2.7/matplotlib/transforms.py:888(_set_intervalx)
+     2915    0.046    0.000    1.405    0.000 /usr/lib/pymodules/python2.7/matplotlib/transforms.py:893(_set_intervaly)
+   174970    0.689    0.000    1.091    0.000 /usr/lib/python2.7/weakref.py:350(keys)
+        1    0.004    0.004    0.975    0.975 ../../source/Disconnect.py:519(RemoveThreshold)
+    12224    0.142    0.000    0.930    0.000 /usr/lib/pymodules/python2.7/matplotlib/markers.py:115(_recache)
+        1    0.000    0.000    0.927    0.927 ../../source/Disconnect.py:84(InitialiseTS)
+        1    0.712    0.712    0.927    0.927 ../../source/Disconnect.py:152(ReadTS)
+     2915    0.027    0.000    0.896    0.000 /usr/lib/pymodules/python2.7/matplotlib/axes.py:1468(_update_line_limits)
+     2949    0.057    0.000    0.818    0.000 /usr/lib/pymodules/python2.7/matplotlib/artist.py:467(set_clip_path)
+40811/26236    0.360    0.000    0.777    0.000 /usr/lib/pymodules/python2.7/matplotlib/units.py:117(get_converter)
+     2957    0.013    0.000    0.770    0.000 /usr/lib/pymodules/python2.7/matplotlib/lines.py:647(get_path)
+     2957    0.133    0.000    0.758    0.000 /usr/lib/pymodules/python2.7/matplotlib/lines.py:386(recache)
+    15198    0.299    0.000    0.740    0.000 /usr/lib/pymodules/python2.7/matplotlib/path.py:86(__init__)
+     3071    0.016    0.000    0.642    0.000 /usr/lib/pymodules/python2.7/matplotlib/markers.py:110(__init__)
+        1    0.371    0.371    0.586    0.586 ../../source/Disconnect.py:139(ReadMinima)
+     6112    0.063    0.000    0.583    0.000 /usr/lib/pymodules/python2.7/matplotlib/markers.py:150(set_marker)
+        1    0.436    0.436    0.572    0.572 ../../source/Disconnect.py:526(RemoveThresholdMin)
+     2949    0.024    0.000    0.530    0.000 /usr/lib/pymodules/python2.7/matplotlib/patches.py:162(get_transform)
+   467202    0.516    0.000    0.516    0.000 {method 'append' of 'list' objects}
+     6112    0.020    0.000    0.514    0.000 /usr/lib/pymodules/python2.7/matplotlib/markers.py:135(set_fillstyle)
+    17491    0.061    0.000    0.510    0.000 /usr/lib/pymodules/python2.7/matplotlib/axis.py:1326(convert_units)
+   252894    0.433    0.000    0.433    0.000 {method 'split' of 'str' objects}
+     5830    0.078    0.000    0.427    0.000 /usr/lib/pymodules/python2.7/matplotlib/lines.py:361(set_axes)
+348168/341757    0.395    0.000    0.411    0.000 {len}
+        1    0.278    0.278    0.399    0.399 ../../source/Disconnect.py:541(RemoveThresholdTS)
+     2915    0.027    0.000    0.399    0.000 /usr/lib/pymodules/python2.7/matplotlib/ticker.py:1202(view_limits)
+     2915    0.045    0.000    0.372    0.000 /usr/lib/pymodules/python2.7/matplotlib/axes.py:214(_xy_from_xy)
+    17492    0.290    0.000    0.359    0.000 /usr/lib/pymodules/python2.7/matplotlib/transforms.py:2272(nonsingular)
+     2949    0.009    0.000    0.356    0.000 /usr/lib/pymodules/python2.7/matplotlib/patches.py:546(get_patch_transform)
+     8745    0.028    0.000    0.355    0.000 /usr/lib/pymodules/python2.7/matplotlib/axis.py:1271(update_units)
+    54153    0.354    0.000    0.354    0.000 {numpy.core.multiarray.array}
+     2949    0.041    0.000    0.347    0.000 /usr/lib/pymodules/python2.7/matplotlib/patches.py:533(_update_patch_transform)

@@ -1,0 +1,4 @@
+format_file path.pdb
+pc_file extractedmin
+projection_file 
+n_atoms 46

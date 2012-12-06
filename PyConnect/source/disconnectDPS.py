@@ -47,8 +47,8 @@ if __name__ == '__main__':
        
     else:
         DGframe = DGCanvasFrame(disc)
-        plt.savefig("tree.eps",format="eps")
-#        plt.show()
+#        plt.savefig("tree.eps",format="eps")
+        plt.show()
 
 #    GUI.MainWin(disc)
     

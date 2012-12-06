@@ -1,0 +1,10 @@
+Script started on Wed 05 Dec 2012 11:47:37 GMT
+]0;lewis@lewis-HP-Pavilion-dv6-Notebook-PC: ~/git/pyconnect/PyConnect/example/BLN46lewis@lewis-HP-Pavilion-dv6-Notebook-PC:~/git/pyconnect/PyConnect/example/BLN46$ hello
+The program 'hello' can be found in the following packages:
+ * hello
+ * hello-debhelper
+Try: sudo apt-get install <selected package>
+]0;lewis@lewis-HP-Pavilion-dv6-Notebook-PC: ~/git/pyconnect/PyConnect/example/BLN46lewis@lewis-HP-Pavilion-dv6-Notebook-PC:~/git/pyconnect/PyConnect/example/BLN46$ goodbye[K[K[K[K[K[K[K
+]0;lewis@lewis-HP-Pavilion-dv6-Notebook-PC: ~/git/pyconnect/PyConnect/example/BLN46lewis@lewis-HP-Pavilion-dv6-Notebook-PC:~/git/pyconnect/PyConnect/example/BLN46$ exit
+
+Script done on Wed 05 Dec 2012 11:47:47 GMT

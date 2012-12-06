@@ -1,0 +1,58 @@
+Wed Dec  5 14:15:34 2012    test_line_collect.stats
+
+         984861 function calls (981932 primitive calls) in 7.383 seconds
+
+   Ordered by: cumulative time
+   List reduced from 3149 to 50 due to restriction <50>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003    7.385    7.385 ../../source/disconnectDPS.py:3(<module>)
+        1    2.403    2.403    3.457    3.457 ../../source/Disconnect.py:44(InitialiseMin)
+        1    0.004    0.004    0.973    0.973 ../../source/Disconnect.py:519(RemoveThreshold)
+        1    0.000    0.000    0.909    0.909 ../../source/Disconnect.py:84(InitialiseTS)
+        1    0.690    0.690    0.909    0.909 ../../source/Disconnect.py:152(ReadTS)
+        1    0.000    0.000    0.697    0.697 ../../source/MatplotlibGUI.py:29(__init__)
+        1    0.000    0.000    0.697    0.697 ../../source/MatplotlibGUI.py:37(init_plot)
+        1    0.370    0.370    0.589    0.589 ../../source/Disconnect.py:139(ReadMinima)
+        1    0.433    0.433    0.568    0.568 ../../source/Disconnect.py:526(RemoveThresholdMin)
+   252880    0.441    0.000    0.441    0.000 {method 'split' of 'str' objects}
+        1    0.009    0.009    0.438    0.438 ../../source/MatplotlibGUI.py:112(PlotDG)
+        1    0.278    0.278    0.400    0.400 ../../source/Disconnect.py:541(RemoveThresholdTS)
+   283606    0.305    0.000    0.305    0.000 {method 'append' of 'list' objects}
+        1    0.057    0.057    0.286    0.286 ../../source/Disconnect.py:171(AssignBasins)
+     4143    0.277    0.000    0.277    0.000 {min}
+        1    0.000    0.000    0.272    0.272 ../../source/Disconnect.py:473(FindGM)
+     6454    0.108    0.000    0.244    0.000 /usr/lib/pymodules/python2.7/matplotlib/path.py:86(__init__)
+        1    0.001    0.001    0.227    0.227 /usr/lib/pymodules/python2.7/matplotlib/pyplot.py:15(<module>)
+        1    0.005    0.005    0.213    0.213 /usr/lib/pymodules/python2.7/matplotlib/figure.py:13(<module>)
+        1    0.001    0.001    0.198    0.198 ../../source/MatplotlibGUI.py:3(<module>)
+        3    0.002    0.001    0.197    0.066 {__import__}
+        1    0.004    0.004    0.196    0.196 /usr/lib/pymodules/python2.7/matplotlib/axes.py:1(<module>)
+   132997    0.193    0.000    0.193    0.000 {range}
+        1    0.000    0.000    0.189    0.189 /usr/lib/pymodules/python2.7/mpl_toolkits/__init__.py:1(<module>)
+        1    0.000    0.000    0.188    0.188 /usr/lib/python2.7/dist-packages/pkg_resources.py:14(<module>)
+        1    0.002    0.002    0.186    0.186 /usr/lib/pymodules/python2.7/matplotlib/axes.py:1428(add_collection)
+        1    0.005    0.005    0.184    0.184 /usr/lib/pymodules/python2.7/matplotlib/collections.py:149(get_datalim)
+     2915    0.014    0.000    0.170    0.000 /usr/lib/pymodules/python2.7/matplotlib/transforms.py:1935(transform_path_non_affine)
+        1    0.000    0.000    0.159    0.159 /usr/lib/pymodules/python2.7/matplotlib/collections.py:810(__init__)
+        1    0.019    0.019    0.157    0.157 /usr/lib/pymodules/python2.7/matplotlib/collections.py:899(set_segments)
+     2915    0.016    0.000    0.153    0.000 /usr/lib/pymodules/python2.7/matplotlib/transforms.py:1131(transform_path)
+      563    0.003    0.000    0.144    0.000 /usr/lib/python2.7/re.py:226(_compile)
+        1    0.026    0.026    0.143    0.143 /usr/lib/python2.7/dist-packages/wx-2.8-gtk2-unicode/wx/__init__.py:14(<module>)
+        1    0.004    0.004    0.143    0.143 /usr/lib/pymodules/python2.7/matplotlib/axis.py:3(<module>)
+        1    0.000    0.000    0.143    0.143 /usr/lib/pymodules/python2.7/matplotlib/figure.py:721(add_subplot)
+        1    0.000    0.000    0.143    0.143 /usr/lib/pymodules/python2.7/matplotlib/axes.py:8410(__init__)
+        1    0.000    0.000    0.142    0.142 /usr/lib/pymodules/python2.7/matplotlib/axes.py:357(__init__)
+       71    0.000    0.000    0.140    0.002 /usr/lib/python2.7/re.py:188(compile)
+       70    0.001    0.000    0.140    0.002 /usr/lib/python2.7/sre_compile.py:495(compile)
+       42    0.127    0.003    0.130    0.003 ../../source/Disconnect.py:208(AssignByTS)
+        1    0.000    0.000    0.124    0.124 /usr/lib/python2.7/dist-packages/pkg_resources.py:694(subscribe)
+       94    0.000    0.000    0.124    0.001 /usr/lib/python2.7/dist-packages/pkg_resources.py:2727(<lambda>)
+       94    0.001    0.000    0.123    0.001 /usr/lib/python2.7/dist-packages/pkg_resources.py:2224(activate)
+    42/34    0.002    0.000    0.119    0.004 /usr/lib/pymodules/python2.7/matplotlib/axis.py:62(__init__)
+        1    0.060    0.060    0.111    0.111 /usr/lib/python2.7/dist-packages/wx-2.8-gtk2-unicode/wx/_core.py:4(<module>)
+        1    0.000    0.000    0.107    0.107 /usr/lib/pymodules/python2.7/matplotlib/pyplot.py:246(figure)
+        1    0.000    0.000    0.107    0.107 /usr/lib/pymodules/python2.7/matplotlib/backends/backend_tkagg.py:73(new_figure_manager)
+        1    0.002    0.002    0.103    0.103 /home/lewis/.local/lib/python2.7/site-packages/numpy/__init__.py:106(<module>)
+        1    0.000    0.000    0.103    0.103 /usr/lib/pymodules/python2.7/matplotlib/axes.py:836(cla)
+    17/13    0.001    0.000    0.101    0.008 /usr/lib/pymodules/python2.7/matplotlib/axis.py:702(cla)

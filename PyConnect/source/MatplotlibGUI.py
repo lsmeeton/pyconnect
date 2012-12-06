@@ -124,7 +124,9 @@ class DGCanvasFrame():
                 self.LinesDG(l,b,c,p)
         print 'shape of self.line_array', np.shape(self.line_array), type(self.line_array[0])
 #        np.swapaxes(self.line_array, 0, 2)
-        self.Line = LineCollection(self.line_array,color=self.rgba_array)
+        self.Line = LineCollection(self.line_array,
+                                   color=self.rgba_array,
+                                   linewidth=0.2)
         self.ax.add_collection(self.Line)
 
     def LinesDG(self,l,b,c,p):

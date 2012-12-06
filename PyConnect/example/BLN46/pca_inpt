@@ -1,0 +1,7 @@
+# hello
+n_atoms 46
+#conv 1E-7
+#iterations 300
+basis cartesian
+min_file BLN46/minimaindex
+points BLN46/points.min
