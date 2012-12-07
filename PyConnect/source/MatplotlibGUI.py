@@ -20,7 +20,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from KeywordInit import Keywords
 from DisconnectPlot import DisconnectPlot
 import time
-
+import sys
 rc('text', usetex=True)
 rc('font', family='serif')
 
@@ -140,8 +140,13 @@ class DGCanvasFrame():
         x2 = self.disc.basin_index['Level'][l]['Basin'][b]['X']
 
         if not c:
-            z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
+            try: z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
+            except KeyError: 
+                print l,b
+                sys.exit()
+#            z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
         else:
+
             z2 = self.disc.basin_index['Level'][l]['Energy']      
 #        self.plot_dataDG = self.ax.plot([x1,x2],[z1,z2], c=rgb, linewidth=0.2)
 #        self.line_array = np.dstack((self.line_array,np.array([[x1,z1],
