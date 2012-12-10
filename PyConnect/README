@@ -1,3 +1,11 @@
 Readme for PyConnect software
 
-Let's see if I can commit changes. Mark
+Dependencies:
+PyConnect needs the matplotlib and numpy packages.
+
+In OpenSUSE, install the following:
+python-numpy
+python-numpy-devel
+python-matplotlib
+python-matplotlib-tk
+python-matplotlib-wx
