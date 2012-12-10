@@ -237,7 +237,7 @@ class DisconnectPlot(Disconnect):
                     ['Min']:
                     temp.append(self.minima_index['Index'][m]
                                 ['Metric']['x'])
-                print temp
+                #print temp
                 self.basin_index['Level'][l]['Basin'][b]\
                     ['MetricX'] = np.mean(temp)
                     

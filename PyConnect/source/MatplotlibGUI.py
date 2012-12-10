@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import wx
+#import wx
 #import sys
 import os
 import matplotlib
@@ -19,10 +19,10 @@ import matplotlib.pylab as plt
 from mpl_toolkits.mplot3d import Axes3D
 from KeywordInit import Keywords
 from DisconnectPlot import DisconnectPlot
-import time
+#import time
 import sys
-rc('text', usetex=True)
-rc('font', family='serif')
+#rc('text', usetex=True)
+#rc('font', family='serif')
 
 
 class DGCanvasFrame():
@@ -165,6 +165,8 @@ class MDGCanvasFrame():
         
                 
     def init_plot(self):
+        self.line_array = []#np.zeros((2,2))
+        self.rgba_array = []
         self.fig = plt.figure()
 
         self.ax = self.fig.add_subplot(111)
@@ -204,6 +206,16 @@ class MDGCanvasFrame():
             
         self.ax.xaxis.set_ticks_position('bottom')
         self.ax.yaxis.set_ticks_position('left')
+        
+        if self.Q == 'X':
+            self.ax.set_xlim(self.disc.basin_index['MinX'],
+                             self.disc.basin_index['MaxX'])
+        else:
+            self.ax.set_xlim(self.disc.basin_index['MinY'],
+                             self.disc.basin_index['MaxY'])
+            
+        self.ax.set_ylim(self.disc.kw.first['E1'] - (self.disc.kw.levels['n'] + 1)*self.disc.kw.delta['dE'],self.disc.kw.first['E1'])#(-48,-52)
+ 
 
         if self.disc.kw['energy_label']['label']: 
             self.ax.set_ylabel(self.disc.kw['energy_label']['label'])
@@ -216,6 +228,7 @@ class MDGCanvasFrame():
                 self.ax.set_xlabel(self.disc.kw['q2']['label'])
 
     def PlotMDG(self):
+        self.plot_listy = []
         for l in self.disc.basin_index['Level']:
             if l == 1: continue
             for b in self.disc.basin_index['Level'][l]['Basin']:
@@ -224,7 +237,10 @@ class MDGCanvasFrame():
                 p = self.disc.basin_index['Level'][l]['Basin'][b]\
                     ['Parents']
                 self.LinesMDG(l,b,c,p)
-
+        self.Line = LineCollection(self.line_array,
+                                   color=self.rgba_array,
+                                   linewidth=0.2)
+        self.ax.add_collection(self.Line)
 
     def LinesMDG(self,l,b,c,p):
         if self.Q == 'X': metric = 'MetricX'
@@ -245,7 +261,8 @@ class MDGCanvasFrame():
             z2 = self.disc.basin_index['Level'][l]['Energy']#+0.5          
         self.plot_dataMDG = self.ax.plot([x1,x2],[z1,z2], color =rgb,
                                                 linewidth=0.2)
-    
+        self.line_array.append(np.array([[x1,z1],[x2,z2]]))
+        self.rgba_array.append(rgb)
 
 class MDG3DCanvasFrame():
     def __init__(self,disc):

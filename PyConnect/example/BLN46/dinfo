@@ -1,11 +1,11 @@
 DELTA 0.5
-FIRST -42.0
-MAXTSENERGY -42.0
+FIRST -48.0
+MAXTSENERGY -48.0
 comment MAXTSBARRIER 15.0
 CENTREGMIN
 CONNECTMIN 3
 comment LEVELS 16
-LEVELS 22
+LEVELS 12
 MINIMA min.data
 TS ts.data
 
@@ -48,4 +48,5 @@ comment EPSILON
 # ENERGY_LABEL "Energy/$\epsilon$"
 # Q1 "$Q_{1}$"
 # Q2 "$Q_{2}$"
-
+# metric 123 PC_projections/PC_projections1
+metric3d PC_projections/PC_projections1 PC_projections/PC_projections2
