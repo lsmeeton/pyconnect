@@ -1,1 +1,11 @@
-/PyConnect
+# Compiled Fortran modules
+*.mod
+*.pyc
+*.pdf
+*.png
+*.eps
+*.ps
+*.stats.*
+*/PC_*
+*~
+*.txt
