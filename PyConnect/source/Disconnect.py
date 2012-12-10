@@ -462,7 +462,9 @@ class Disconnect():
                             ['Min'])
                 self.basin_index['Level'][l]['Basin'][b]['Size'] = node_size
                     
-                if node_size == 1: self.AssignEnergytoChildlessBasin(l,b)
+                if (node_size == 1 or
+                    l == self.kw.levels['n']):
+                    self.AssignEnergytoChildlessBasin(l,b)
                     
     def AssignEnergytoChildlessBasin(self,l,b):
         '''

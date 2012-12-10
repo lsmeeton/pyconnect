@@ -31,23 +31,27 @@ if __name__ == '__main__':
     # End initialisation
     disc.PositionBasins()
     #disc.GetMetric3D()
-    
+    print 'hello here'
+    print disc.kw.metric
+    print disc.kw.metric3d
     if disc.kw.metric3d['present']:
-
+        print '3d'
         DGframe = DGCanvasFrame(disc)
         MDG1frame = MDGCanvasFrame(disc,Q='X')
         MDG2frame = MDGCanvasFrame(disc,Q='Y')
         MDG3Dframe = MDG3DCanvasFrame(disc)
         plt.show()
-
+        
     elif disc.kw.metric['present']:
         DGframe = DGCanvasFrame(disc)
         MDGframe = MDGCanvasFrame(disc,Q='X')
         plt.show()
-       
+        print '2d'
     else:
+        print 'else'
         DGframe = DGCanvasFrame(disc)
-#        plt.savefig("tree.eps",format="eps")
+#        plt.savefig("tree.pdf",format="pdf")
+        print 'hello'
         plt.show()
 
 #    GUI.MainWin(disc)
