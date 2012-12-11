@@ -73,6 +73,7 @@ class Keywords(dict):
             self['q1'] = self.Q1()
             self['q2'] = self.Q2()
             self['colour_bar_label'] = self.ColourBarLabelRead()
+            self['tex'] = self.TexRead()
 
             # Check minima file and TS file
             self.minima['data_file'] = self.FileCheck(
@@ -447,6 +448,17 @@ class Keywords(dict):
         else:
              return {'label': None}
          
+         
+    def TexRead(self):
+        '''
+        Turns on latex rendering in matplotlib plots
+        '''
+        keyword = self.ReadDinfo('tex')
+        if keyword:
+            return True
+        else:
+            return False
+        
 if __name__ == '__main__':
     #pr = prac()
     kw = Keywords()

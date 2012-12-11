@@ -21,8 +21,6 @@ from KeywordInit import Keywords
 from DisconnectPlot import DisconnectPlot
 #import time
 import sys
-#rc('text', usetex=True)
-#rc('font', family='serif')
 
 
 class DGCanvasFrame():
@@ -47,6 +45,8 @@ class DGCanvasFrame():
 #        self.ax.set_title('Disconnectivity Graph')
 
         self.FormatAxes()
+        
+        self.FormatPlot()
         
         self.PlotDG()
         
@@ -78,6 +78,16 @@ class DGCanvasFrame():
             
         self.ax.set_xlim(-0.5,0.5)
         self.ax.set_ylim(self.disc.kw.first['E1'] - (self.disc.kw.levels['n'] + 1)*self.disc.kw.delta['dE'],self.disc.kw.first['E1'])#(-48,-52)
+ 
+ 
+    def FormatPlot(self):
+        '''
+        Formats latex labels
+        '''
+        if self.disc.kw.tex:
+            rc('text', usetex=True)
+            rc('font', family='serif')
+
  
     def AddColourBar(self):
         '''
