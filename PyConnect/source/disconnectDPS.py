@@ -8,6 +8,7 @@ from DisconnectPlot import DisconnectPlot
 import wx
 #import ProxyGUI as GUI
 from MatplotlibGUI import DGCanvasFrame, MDGCanvasFrame, MDG3DCanvasFrame
+from mayavi import mlab
 
 if __name__ == '__main__':
     
@@ -41,7 +42,7 @@ if __name__ == '__main__':
         MDG2frame = MDGCanvasFrame(disc,Q='Y')
         MDG3Dframe = MDG3DCanvasFrame(disc)
         plt.show()
-        
+        mlab.show()
     elif disc.kw.metric['present']:
         DGframe = DGCanvasFrame(disc)
         MDGframe = MDGCanvasFrame(disc,Q='X')

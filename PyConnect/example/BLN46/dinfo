@@ -50,4 +50,4 @@ comment EPSILON
 # Q2 "$Q_{2}$"
 # metric 123 PC_projections/PC_projections1
 metric3d PC_projections/PC_projections1 PC_projections/PC_projections2
-tex
+# tex

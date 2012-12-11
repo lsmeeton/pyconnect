@@ -21,6 +21,7 @@ from KeywordInit import Keywords
 from DisconnectPlot import DisconnectPlot
 #import time
 import sys
+from mayavi import mlab
 
 
 class DGCanvasFrame():
@@ -77,7 +78,7 @@ class DGCanvasFrame():
             self.ax.set_ylabel(self.disc.kw['energy_label']['label'])
             
         self.ax.set_xlim(-0.5,0.5)
-        self.ax.set_ylim(self.disc.kw.first['E1'] - (self.disc.kw.levels['n'] + 1)*self.disc.kw.delta['dE'],self.disc.kw.first['E1'])#(-48,-52)
+        self.ax.set_ylim(self.disc.kw.first['E1'] - (self.disc.kw.levels['n'])*self.disc.kw.delta['dE'],self.disc.kw.first['E1'])#(-48,-52)
  
  
     def FormatPlot(self):
@@ -178,7 +179,6 @@ class MDGCanvasFrame():
         self.line_array = []#np.zeros((2,2))
         self.rgba_array = []
         self.fig = plt.figure()
-
         self.ax = self.fig.add_subplot(111)
         
 #        self.ax.set_title('Metric Disconnectivity Graph')
@@ -224,7 +224,7 @@ class MDGCanvasFrame():
             self.ax.set_xlim(self.disc.basin_index['MinY'],
                              self.disc.basin_index['MaxY'])
             
-        self.ax.set_ylim(self.disc.kw.first['E1'] - (self.disc.kw.levels['n'] + 1)*self.disc.kw.delta['dE'],self.disc.kw.first['E1'])#(-48,-52)
+        self.ax.set_ylim(self.disc.kw.first['E1'] - (self.disc.kw.levels['n'])*self.disc.kw.delta['dE'],self.disc.kw.first['E1'])#(-48,-52)
  
 
         if self.disc.kw['energy_label']['label']: 
@@ -284,24 +284,26 @@ class MDG3DCanvasFrame():
         
                 
     def init_plot(self):
-        self.fig = plt.figure()
+#        self.fig = plt.figure()
+        self.rgba_array = []
+        self.fig = mlab.figure(1,bgcolor=(0.5, 0.5, 0.5))
+        mlab.clf()
 
-
-        self.ax = self.fig.add_subplot(111, projection='3d')
+#        self.ax = self.fig.add_subplot(111, projection='3d')
         
 
 #        self.ax.set_title('Metric Disconnectivity Graph')
         
-        self.FormatAxes()
+#        self.FormatAxes()
 
         self.PlotMDG()
-        if self.disc.kw.trval['trval_file']:
-            self.cax, kw = matplotlib.colorbar.make_axes(self.ax)
-            
-            cb1=matplotlib.colorbar.ColorbarBase(self.cax,cmap=self.disc.col_map,
-                                                 norm=self.disc.norm,
-                                                 orientation='vertical')
-            cb1.set_label(self.disc.kw['colour_bar_label']['label'])
+#        if self.disc.kw.trval['trval_file']:
+#            self.cax, kw = matplotlib.colorbar.make_axes(self.ax)
+#            
+#            cb1=matplotlib.colorbar.ColorbarBase(self.cax,cmap=self.disc.col_map,
+#                                                 norm=self.disc.norm,
+#                                                 orientation='vertical')
+#            cb1.set_label(self.disc.kw['colour_bar_label']['label'])
         
     def FormatAxes(self):
         '''
@@ -317,10 +319,30 @@ class MDG3DCanvasFrame():
         
         if self.disc.kw['q2']['label']:
             self.ax.set_ylabel(self.disc.kw['q2']['label'])
-
-
    
     def PlotMDG(self):
+        indx = 0
+        self.plot_index = {} # key: level, basin tuple, value: individual basin index
+        self.list_x = []
+        self.list_y = []
+        self.list_z = []
+        self.connections = []
+        
+        for b in self.disc.basin_index['Level'][1]['Basin']:
+            self.plot_index[(1,b)] = indx
+            rgb = self.disc.basin_index['Level'][1]['Basin'][b]['RGB']
+
+            x1 = self.disc.basin_index['Level'][1]['Basin'][b]['MetricX']
+            y1 = self.disc.basin_index['Level'][1]['Basin'][b]['MetricY']
+
+            z1 = self.disc.basin_index['Level'][1]['Energy']
+            self.rgba_array.append(rgb)
+            self.list_x.append(x1)
+            self.list_y.append(y1)
+            self.list_z.append(z1)
+              
+            indx += 1
+        
         for l in self.disc.basin_index['Level']:
             if l == 1: continue
             for b in self.disc.basin_index['Level'][l]['Basin']:
@@ -328,42 +350,59 @@ class MDG3DCanvasFrame():
                     ['Children']
                 p = self.disc.basin_index['Level'][l]['Basin'][b]\
                     ['Parents']
+                if not self.plot_index.has_key((l,b)):
+                    self.plot_index[(l,b)] = indx
                 self.LinesMDG(l,b,c,p)
+                indx += 1
+#        mlab.points3d(self.list_x[:],self.list_y[:],self.list_z[:],
+#                      color = self.rgba_array)
+        self.list_x = np.hstack(self.list_x)
+        self.list_y = np.hstack(self.list_y)
+        self.list_z = np.hstack(self.list_z)
+        self.connections = np.vstack(self.connections)
+        print np.shape(self.list_x), np.shape(self.plot_index)
+#        self.s = self.list_x**2 + self.list_y**2 + self.list_z**2
+        self.src = mlab.pipeline.scalar_scatter(self.list_x, 
+                                           self.list_y, 
+                                           self.list_z,
+                                           self.list_x) 
+#                                           np.zeros(len(self.list_x)))
+        
+        self.src.mlab_source.dataset.lines = self.connections
+#        self.lines = mlab.pipeline.stripper(self.src)
+        mlab.pipeline.surface(self.src, line_width=1, 
+                              opacity = 0.4)
+        mlab.axes(self.src)
+        mlab.show() 
 
-
-    def LinesDG(self,l,b,c,p):
-        rgb = self.disc.basin_index['Level'][l]['Basin'][b]['RGB']
-
-        x1 = self.disc.basin_index['Level'][l-1]['Basin'][p]['X']
-
-        z1 = 1.0*(self.disc.basin_index['Level'][l-1]['Energy'])
-        x2 = self.disc.basin_index['Level'][l]['Basin'][b]['X']
-
-        if not c:
-            z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
-        else:
-            z2 = self.disc.basin_index['Level'][l]['Energy']      
-        self.plot_dataDG = self.ax.plot([x1,x2],[z1,z2], color =rgb, linewidth=0.2)
-    
 
     def LinesMDG(self,l,b,c,p):
         rgb = self.disc.basin_index['Level'][l]['Basin'][b]['RGB']
 
-        x1 = self.disc.basin_index['Level'][l-1]['Basin'][p]['MetricX']
-        y1 = self.disc.basin_index['Level'][l-1]['Basin'][p]['MetricY']
-        z1 = 1.0*(self.disc.basin_index['Level'][l-1]['Energy'])
+        x1 = self.disc.basin_index['Level'][l]['Basin'][b]['MetricX']
+        y1 = self.disc.basin_index['Level'][l]['Basin'][b]['MetricY']
+#        z1 = 1.0*(self.disc.basin_index['Level'][l]['Energy'])
 
-        x2 = self.disc.basin_index['Level'][l]['Basin'][b]['MetricX']
-        y2 = self.disc.basin_index['Level'][l]['Basin'][b]['MetricY']
+        
+#        x2 = self.disc.basin_index['Level'][l]['Basin'][b]['MetricX']
+#        y2 = self.disc.basin_index['Level'][l]['Basin'][b]['MetricY']
         if not c:
-            z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
+            z1 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
 
         else:
-            z2 = self.disc.basin_index['Level'][l]['Energy']#+0.5          
+            z1 = self.disc.basin_index['Level'][l]['Energy']#+0.5          
         
-        self.plot_dataMDG = self.ax.plot([x1,x2],[y1,y2],[z1,z2], color =rgb,
-                                                linewidth=0.2)
-    
+#        self.plot_dataMDG = self.ax.plot([x1,x2],[y1,y2],[z1,z2], color =rgb,
+#                                                linewidth=0.2)
+#        mlab.plot3d([x1,x2],[y1,y2],[z1,z2], color =rgb)
+        self.rgba_array.append(rgb)
+        self.list_x.append(x1)
+        self.list_y.append(y1)
+        self.list_z.append(z1)
+        indx1 = self.plot_index[(l,b)]
+        indx2 = self.plot_index[(l-1,p)]
+        self.connections.append(np.array([indx1,indx2]))
+
 
 if __name__ == '__main__':
     kw = Keywords()
