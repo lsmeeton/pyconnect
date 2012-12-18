@@ -3,7 +3,7 @@ import os
 import numpy as np
 import array
 import lewismod
-import structure_reader
+import structure_read
 import matplotlib.mlab as mlab
 
 __metaclass__ = type
@@ -113,7 +113,7 @@ class PCAinit():
             sys.stdout.write("%3.1f%% Structures Read"%(progress))
             sys.stdout.flush()
             self.config_space = np.append(self.config_space, 
-                                          structure_reader.structure_read(self.kw.points,
+                                          structure_read.structure_read(self.kw.points,
                                                                         rec, 
                                                                         self.kw.n_atoms))
         sys.stdout.write('\r')
