@@ -46,7 +46,7 @@ class Keywords(dict):
             self['metric3d'] = self.Metric3DRead()
             self['centregmin'] = [],
             self['dumpnumbers'] = self.DumpNumbersRead()
-            self['dumpsizes'] = [],
+            self['dumpsizes'] = self.DumpSizesRead()
             self['excludeall'] = [],
             self['connectmin'] = self.ConnectminRead()
             self['colourprint'] = [],
@@ -312,6 +312,16 @@ class Keywords(dict):
         
         '''
         keyword = self.ReadDinfo('dumpnumbers')
+        if keyword:
+            return dict(dump = True)
+        else:
+            return dict(dump = False)
+        
+    def DumpSizesRead(self):
+        '''
+        
+        '''
+        keyword = self.ReadDinfo('dumpsizes')
         if keyword:
             return dict(dump = True)
         else:

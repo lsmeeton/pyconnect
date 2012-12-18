@@ -360,7 +360,9 @@ class MDG3DCanvasFrame():
         self.list_y = np.hstack(self.list_y)
         self.list_z = np.hstack(self.list_z)
         self.connections = np.vstack(self.connections)
-        print np.shape(self.list_x), np.shape(self.plot_index)
+#        print np.shape(self.list_x), np.shape(self.plot_index)
+#        for i in self.disc.minima_index['Index']:
+#            self.rgba_array.append(self.disc.minima_index['Index'][i][])
 #        self.s = self.list_x**2 + self.list_y**2 + self.list_z**2
         self.src = mlab.pipeline.scalar_scatter(self.list_x, 
                                            self.list_y, 
@@ -395,7 +397,8 @@ class MDG3DCanvasFrame():
 #        self.plot_dataMDG = self.ax.plot([x1,x2],[y1,y2],[z1,z2], color =rgb,
 #                                                linewidth=0.2)
 #        mlab.plot3d([x1,x2],[y1,y2],[z1,z2], color =rgb)
-        self.rgba_array.append(rgb)
+#        self.rgba_array.append(rgb)
+        self.rgba_array.append(self.disc.basin_index['Level'][l]['Basin'][b]['Trval'])
         self.list_x.append(x1)
         self.list_y.append(y1)
         self.list_z.append(z1)
