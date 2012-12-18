@@ -673,4 +673,21 @@ class Disconnect():
                 f.write('Node\t%d\n'%b)
                 for m in self.basin_index['Level'][l]['Basin'][b]['Min']:
                     f.write('%d\n'%m)
+                f.write('\n')
+            f.write('\n')
+        f.close()
+        
+    def DumpSizes(self):
+        '''
+        If self.kw.dump_sizes['dump'] = True, write which minima belong to 
+        which level in file "node_sizes"
+        '''
+        f = open(r'node_sizes','w')
+        for l in self.basin_index['Level']:
+            f.write('LEVEL\t%d\n=========\n\n'%l)
+            for b in self.basin_index['Level'][l]['Basin']:
+                s = self.basin_index['Level'][l]['Basin'][b]['Size']
+                f.write('%d\t%d\n'%(b,s))
+
+            f.write('\n')
         f.close()
