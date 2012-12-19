@@ -35,7 +35,7 @@ class DisconnectPlot(Disconnect):
 #            self.GetMetric2D()
         print self.kw.trval
         if self.kw.trmin['trmin_file']: self.GetTrminColours()
-        elif self.kw.trval['trval_file']: self.GetTrvalColours()
+        elif self.kw.trval['trval_file']: self.GetTrvalColoursNewStyle()
         
         self.CalcCoordinates()
         self.ArangeBasins()
@@ -46,10 +46,10 @@ class DisconnectPlot(Disconnect):
         display media (ie. ps/eps/openGL etc)
         '''
         self.AssignLineHeight()
-        if self.kw.metric3d['present']:#self.kw.metric3D['present']: 
-            self.OpenGLCoordsMetric3D()
-        elif self.kw.metric['present']: 
-            self.OpenGLCoordsMetric2D()
+#        if self.kw.metric3d['present']:#self.kw.metric3D['present']: 
+#            self.OpenGLCoordsMetric3D()
+#        elif self.kw.metric['present']: 
+#            self.OpenGLCoordsMetric2D()
 #        self.OpenGLCoordsMetric3D()
 
     def OpenGLCoordsMetric2D(self):
@@ -316,8 +316,10 @@ class DisconnectPlot(Disconnect):
                 self.minima_index['Index'][m]['Metric']['x'] = x
                 if x > self.basin_index['MaxX']: 
                     self.basin_index['MaxX'] = x
+                    
                 if x < self.basin_index['MinX']:
                     self.basin_index['MinX'] = x
+                    
             except KeyError:
 #                print self.kw.metric3d['metricx_file'] 
                 print('Minimum %d in file "%s" but not in file "%s"'
@@ -327,8 +329,7 @@ class DisconnectPlot(Disconnect):
 #                print self.minima_index['Index'][m ]
                 sys.exit()
 
-                
-        
+            
         for l in self.basin_index['Level']:
             for b in self.basin_index['Level'][l]['Basin']:
                 temp_x = []
@@ -553,7 +554,8 @@ class DisconnectPlot(Disconnect):
         sgn = True
         # Sort basins into ascending size order
         size_order = self.OrderByBasinSize(l,c)
-        #size_order = self.Mix(size_order)
+       
+#        size_order = self.Mix(size_order)
         
         for i in size_order:
             if sgn:
@@ -653,29 +655,64 @@ class DisconnectPlot(Disconnect):
                             get)
         return temp_order
 
-    #def Mix(self, mixlist):
-    #    '''
-    #    Mixes up the size order
-    #    '''
-    #    #n = len(mixlist)
-    #    copylist = []#mixlist
-    #    #pos = 1
-    #    sgn = True
-    #    #delta = n - 1
-    #    print 'mix', mixlist
-    #    while True:
-    #        
-    #        #if sgn:
-    #        x = mixlist.pop(0)
-    #        copylist.append(x)
-    #        if len(mixlist) == 0: break
-    #        #    sgn = False
-    #        #    print 'T', x
-    #        #if not sgn:
-    #        x = mixlist.pop()
-    #        copylist.append(x)
-    #        #    sgn = True
-    #        #    print 'F', x
-    #        if len(mixlist) == 0: break
-    #    print 'COPY', copylist
-    #    return copylist
+#    def Mix(self, mixlist):
+#        '''
+#        Mixes up the size order
+#        '''
+#        n = len(mixlist)
+#        copylist = []#mixlist
+#        pos = 1
+#        sgn = True
+#        delta = n - 1
+##        print 'mix', mixlist
+#        while True:
+#            
+#            if sgn:
+#                x = mixlist.pop(0)
+#                copylist.append(x)
+#                if len(mixlist) == 0: break
+#                sgn = False
+#            #    print 'T', x
+#            if not sgn:
+#                x = mixlist.pop()
+#                copylist.append(x)
+#                sgn = True
+#            #    print 'F', x
+#                if len(mixlist) == 0: break
+##        print 'COPY', copylist
+#        return copylist
+    
+#==============================================================================    
+#===========================Interactive Functions============================== 
+#==============================================================================
+
+    def ChangeBasinColour(self, colour_in, colour_out):
+        '''
+        Changes the colour of a collection of minima defined using the trmin keyword
+        '''
+        for l in self.basin_index['Level']:
+            for b in self.basin_index['Level'][l]['Basin']:
+                for m in self.basin_index['Level'][l]['Basin'][b]['Min']:
+                    rgb = self.basin_index['Level'][l]['Basin'][b]['RGB']
+                    if (rgb == colour_in):
+                            self.basin_index['Level'][l]['Basin'][b]['RGB'] = colour_out
+                                
+    
+    def SwapBasinLocation(self,b1,b2,l,p):
+        '''
+        Swaps the locations of basins b1 and b2 and level l, who share a parent 
+        p at level l-1.
+        '''
+        pcheck = self.basin_index['Level'][l-1]['Basin'][p].has_key()
+        p1 = self.basin_index['Level'][l]['Basin'][b1]['Parent']
+        p2 = self.basin_index['Level'][l]['Basin'][b2]['Parent']
+        if p1 == p and p2 ==p and pcheck:
+            f1 = self.basin_index['Level'][l]['Basin'][b1]['FirstClmn']
+            l1 = self.basin_index['Level'][l]['Basin'][b1]['LastClmn']
+            s1 = self.basin_index['Level'][l]['Basin'][b1]['Size']
+            
+            f2 = self.basin_index['Level'][l]['Basin'][b2]['FirstClmn']
+            l2 = self.basin_index['Level'][l]['Basin'][b2]['LastClmn']
+            s2 = self.basin_index['Level'][l]['Basin'][b2]['Size']
+            
+            
