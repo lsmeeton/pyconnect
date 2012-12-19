@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 from PCAprint import PCAprint
-from PCA import PCA
-from PCAprep import MyPCAprep
-from PCAinit import PCAinit
+#from PCA import PCA
+#from PCAprep import MyPCAprep
+#from PCAinit import PCAinit
 from KeywordInit import Keyword
 
 if __name__ == '__main__':
@@ -36,5 +36,7 @@ if __name__ == '__main__':
     pca.PrintPCACartesianCoords()
     pca.PrintPCAProjections()
     pca.PrintPCAVariance()
+    pca.SavePCMatrix()
+    pca.SaveEnsembleAverage()
 #    pca.PrintPCMatrix()
 #    print pca.PCs[0,1:3]

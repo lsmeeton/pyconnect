@@ -76,6 +76,20 @@ class PCAprint(PCA):
                         %(i+1, self.config_mu[i], self.config_sigma[i], 
                           self.norm_variance[i], self.cum_variance[i]))
             f.close()
+    
+    def SavePCMatrix(self):
+        '''
+        Save self.PCs as a .npy file called "PCs.npy"
+        '''
+        np.save(self.kw.PC_coords_dir_name + '/PCs.npy', self.PCs)
+        
+    def SaveEnsembleAverage(self):
+        '''
+        save self.ensemble_average as a .npy file called "ensemble.structure.npy"
+        '''
+        np.save(self.kw.PC_coords_dir_name + 
+                '/ensemble.structure.npy', self.ensemble_average)
+        
             
     def PrintPCMatrix(self):
         '''
