@@ -112,6 +112,17 @@ class MyPCAprep(PCAinit):
         self.ConvertDihedrals()
         self.shape = np.shape(self.config_space)
         
+    def ReshapeVector(self,vector_in):
+        '''
+        Converts a 1D [n_atoms*3] array 'vector_in', containing a single 
+        structure into a 2D [3][n_atoms] array of cartesian co-ordinates which 
+        is returned as vector_out.
+        '''
+        vector_in = vector_in.reshape([-1,3])
+        vector_out = np.swapaxes(vector_in, 0, 1)
+        
+        return vector_out
+        
     #-------------------------------------------------------#
     # Functions that convert from cartesian co-ordinates to internal 
     # dihedral co-ordinates

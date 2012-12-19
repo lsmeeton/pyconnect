@@ -90,6 +90,21 @@ class PCAprint(PCA):
         np.save(self.kw.PC_coords_dir_name + 
                 '/ensemble.structure.npy', self.ensemble_average)
         
+    def PrintStructureXYZ(self,structure):
+        '''
+        Takes as input a 2D [3][n_atoms] np array and converts it to a string 
+        for printing or writing to file.
+        '''
+        m, n = structure.shape
+        if m == 3 and n == self.kw.n_atoms:
+            structure = np.swapaxes(structure,0,1)
+            structure_str = np.array_str(structure, precision=6)
+            structure_str = structure_str.replace('[[', ' ')
+            structure_str = structure_str.replace('[', '')
+            structure_str = structure_str.replace(']', '')
+            
+            return structure_str
+        
             
     def PrintPCMatrix(self):
         '''

@@ -38,5 +38,7 @@ if __name__ == '__main__':
     pca.PrintPCAVariance()
     pca.SavePCMatrix()
     pca.SaveEnsembleAverage()
+#    pc1 = pca.ReshapeVector(pca.PCs[0])
+#    print pca.PrintStructureXYZ(pc1)
 #    pca.PrintPCMatrix()
 #    print pca.PCs[0,1:3]
