@@ -26,6 +26,8 @@ class Keyword():
         self.pc_file = None
         self.base_file = None
         
+        self.pc = None
+        self.ensemble_average_file = None
 #        self.base_pc = None # This is the value of the
 
         self.n_atoms = None
@@ -90,6 +92,8 @@ class Keyword():
         self.n_atoms = int(self.n_atoms)
         self.format_file = str(self.format_file)
         self.pc_file = str(self.pc_file)
+        self.pc = int(self.pc)
+        self.ensemble_average_file = str(self.ensemble_average_file)
         self.base_file = str(self.base_file)
         self.pdb_output = str(self.pdb_output)
         self.n_steps = int(self.n_steps)
@@ -110,6 +114,10 @@ class PC_project():
         self.kw.FileCheck(self.kw.format_file)
         self.kw.FileCheck(self.kw.pc_file)
         self.kw.FileCheck(self.kw.base_file)
+        
+        # Read PCs from numpy binary
+        self.PCs = np.load(self.kw.pc_file)
+        self.ensemble_average = np.load(self.kw.ensemble_average_file)
         
         # Initialise xyz vectors
         self.pc_xyz = self.Initxyz()
@@ -194,22 +202,12 @@ class PC_project():
         '''
         
         '''
-        i = 0
-        for line in open(self.kw.pc_file):
-            line = line.split()
-            if i <= 1: 
-
-                i += 1
-                continue #First two lines are header info
-            if len(line)==0 or i == (self.kw.n_atoms + 2): 
-
-                break
-
-            try: self.pc_xyz[(i-2),:] = self.xyzLineRead(line)
-            except IndexError:
-                
-                sys.exit("i = %d"%i)
-            i += 1
+        self.pc_xyz = self.PCs[self.kw.pc - 1]
+        self.pc_xyz = self.pc_xyz.reshape([self.kw.n_atoms,
+                                           3])
+#        self.config_space = np.swapaxes(self.config_space,1,2)
+#        self.shape = np.shape(self.config_space)
+#        print self.pc_xyz
         
     def xyzLineRead(self,line):
         '''
@@ -259,7 +257,7 @@ class PC_project():
         '''
         Writes self.pdb to file "self.pdb_output" 
         '''
-        i = 0
+
         f = open(self.pdb_output_file, 'w')
         for l in self.pdb:
 #            print l[10:14]
@@ -296,56 +294,105 @@ class PC_project():
         
     def PCSinglePoint(self, structure):
         '''
-        Calculates the the value of self.pc_xyz at structure
+        Calculates the value of self.pc_xyz at structure
         '''
-#        norm = (self.pc_xyz*self.pc_xyz).sum()
-#        single_point = (self.pc_xyz*structure).sum()
-#        single_point = single_point/norm
-#        return single_point
-        structure = np.ndarray.flatten(structure.T,order='C')
-        print np.shape(structure), np.shape(np.dot(self.PCs,structure.T))[0]
-        print np.dot(self.PCs.T,structure)[0]
-        print np.dot(structure,self.PCs)[0]
+        # First rotates 'structure' be oriented as closely as possible to the 
+        # ensemble mean structure, self.ensemble_average
+        print 'structure 1'
+        print structure
+        self.structure = np.swapaxes(structure, 0, 1)
+        print 'structure 2'
+        print self.structure
+        self.CentreOfMass()
+        print 'CoM'
+        print self.structure
+#        print np.shape(self.structure), np.shape(self.ensemble_average.T)
+        self.U = np.dot(self.structure,self.ensemble_average.T)
+#        print np.shape(self.U)
+        H, D, KT = np.linalg.svd(self.U)
+
+        K = KT.T
+        self.H, self.D, self.K = H, D, K
+            
+        # Calculate rotation matrix and rotate.
+        self.Rotate()
+#        self.structure = np.swapaxes(self.structure, 0, 1)
+        self.structure = np.ndarray.flatten(self.structure.T,order='C')
+
         
-        return np.dot(self.PCs,structure.T)[0]
+        self.single_point = np.dot(self.PCs,self.structure.T) 
     
-    def ReadMatrix(self):
+    def CentreOfMass(self):
         '''
-        A thrown together function to read co-ordinate matrix for projection
-        purposes
+        Calculate Centre of Mass for self.ensemble_average and self.structure, 
+        and transform of self.structure to that of self.ensemble_average. 
         '''
-        self.PCs = np.zeros([3*self.kw.n_atoms,3*self.kw.n_atoms])
-#        f = open('self.PCsMatrix','r')
-        i = 0
-        j = 0
-        for line in open('self.PCsMatrix','r'):
-            line = line.split()
-            for n in line:
-#                print i, j, np.shape(self.PCs)
-                self.PCs[i,j] = float(n)
-                j += 1
-            j = 0
-            i += 1
+        
+        CoMensemble = (1.0/self.kw.n_atoms)*(np.sum(self.ensemble_average, 
+                                             axis = 1))
+        CoMstructure = (1.0/self.kw.n_atoms)*(np.sum(self.structure, 
+                                             axis = 1))
+        self.structure = (self.structure + CoMensemble.reshape([3,1])
+                          - CoMstructure.reshape([3,1]))
+        print CoMensemble, CoMstructure#, (1.0/self.kw.n_atoms)*(np.sum(self.structure,axis = 1))
+    
+    def Rotate(self):
+        ''' 
+        Calculate rotation matrix according to selection rules, and act on 
+        matrix structure 
+        '''
+    
+        if (self.D[2] == 0):
+            if (self.D[1] == 0):
+                sys.exit('ERROR: All atoms are in a line')
+            sys.exit('ERROR: All atoms are in a plane')
+    
+        # Caclulate determinant of U
+        detU = np.linalg.det(self.U)
+    
+        K = np.matrix(self.K)
+        H = np.matrix(self.H)
+    
+        if (detU > 0):
+            rotation = np.dot(K[:,0],H[:,0].T) + np.dot(K[:,1],H[:,1].T) \
+            + np.dot(K[:,2],H[:,2].T)
+    
+        if (detU < 0):
+            if (self.D[1] == self.D[2]):
+                sys.exit('ERROR: D[1] == D[2]')
+            rotation = np.dot(K[:,0],H[:,0].T) + np.dot(K[:,1],H[:,1].T) \
+            - np.dot(K[:,2],H[:,2].T)
+    
+        print np.shape(rotation)
+        self.structure= np.dot(rotation, self.structure)
+
+#    def ReadMatrix(self):
+#        '''
+#        A thrown together function to read co-ordinate matrix for projection
+#        purposes
+#        '''
+#        self.PCs = np.zeros([3*self.kw.n_atoms,3*self.kw.n_atoms])
+##        f = open('self.PCsMatrix','r')
+#        i = 0
+#        j = 0
+#        for line in open('self.PCsMatrix','r'):
+#            line = line.split()
+#            for n in line:
+##                print i, j, np.shape(self.PCs)
+#                self.PCs[i,j] = float(n)
+#                j += 1
+#            j = 0
+#            i += 1
 
 
 if __name__ == '__main__':
     kw = Keyword()
     pc = PC_project(kw)
-#    print pc.pdb_template
-#    print pc.pc_xyz
-#    print pc.projection_xyz
-#    pc.Project(0.0)
-#    pc.pdbMake()
-#    pc.pdb_output_file = pc.kw.pdb_output
+
+    b = np.load('PC_coords/PCs.npy')
+    a = b[0]
+    a = np.swapaxes(a, 0, 1)
+#    print a
     pc.SetProjectionCoord()
-#    pc.ReadMatrix()
-#    a = pc.PCSinglePoint(pc.base_xyz)
-#    b = pc.PCSinglePoint(pc.pc_xyz)
-#    c = (pc.base_xyz*pc.base_xyz).sum()
-#    print a, b, c
-#    print np.shape(pc.base_xyz)
-#    print pc.PCs[0,1:3]
-#    pc.pdbWrite()
-#    print 'hello\n',pc.pdb_template
-#    print np.shape(pc.pdb)
-#    print np.shape(pc.pdb_template)
+    pc.PCSinglePoint(pc.base_xyz)
+    print pc.single_point[0]

@@ -213,28 +213,10 @@ class MyPCAprep(PCAinit):
         # structure in the ensemble relative to the ensemble mean
             for j in range(self.n_min): 
 
-                self.structure = self.config_space[j,:,:]
-                # Calculate matrix U <===== Need a more descriptive name
-                self.U = np.dot(self.structure,self.ensemble_average.T)
-            
-                # Calculate SVD of U ========> U   =   H     D     KT
-                #                            (3x3)   (3x3) (3x3)  (3x3)
-                # H is a matrix composed of three column vectors h_i {i = 1,2,3}
-                # KT is the transverse of matrix K, which is also composed of 
-                # three column vectors k_i {i = 1,2,3}
-                # D is a diagonal matrix , elements of which correspond to the 
-                # singular values of U
-                # numpy.linalg.svd returns D as a 1D array, i.e., D(i,i) = D[i]
-            
-                H, D, KT = np.linalg.svd(self.U)
+#                structure = self.config_space[j,:,:]
+                
 
-                K = KT.T
-                self.H, self.D, self.K = H, D, K
-            
-                # Calculate rotation matrix and rotate.
-                self.Rotate()    
-
-                self.config_space[j,:,:] = self.structure
+                self.config_space[j,:,:] = self.CalcRotate(self.config_space[j,:,:])    
 
             # Calculate ensemble average after iteration
             new_ensemble_average = np.mean(self.config_space, axis=0)
@@ -278,9 +260,34 @@ class MyPCAprep(PCAinit):
                 atom_residue[j] = np.dot(diff, diff)
 
         self.structure_residue[i] = 0.5*np.sum(atom_residue)
-    
         
-    def Rotate(self):
+    def CalcRotate(self, structure):
+        '''
+        
+        '''
+        # Calculate matrix U <===== Need a more descriptive name
+        self.U = np.dot(structure,self.ensemble_average.T)
+            
+        # Calculate SVD of U ========> U   =   H     D     KT
+        #                            (3x3)   (3x3) (3x3)  (3x3)
+        # H is a matrix composed of three column vectors h_i {i = 1,2,3}
+        # KT is the transverse of matrix K, which is also composed of 
+        # three column vectors k_i {i = 1,2,3}
+        # D is a diagonal matrix , elements of which correspond to the 
+        # singular values of U
+        # numpy.linalg.svd returns D as a 1D array, i.e., D(i,i) = D[i]
+            
+        H, D, KT = np.linalg.svd(self.U)
+
+        K = KT.T
+        self.H, self.D, self.K = H, D, K
+            
+        # Calculate rotation matrix and rotate.
+        structure = self.Rotate(structure)
+    
+        return structure
+        
+    def Rotate(self, structure):
         ''' 
         Calculate rotation matrix according to selection rules, and act on 
         matrix structure 
@@ -308,4 +315,6 @@ class MyPCAprep(PCAinit):
             - np.dot(K[:,2],H[:,2].T)
     
     
-        self.structure= np.dot(rotation, self.structure)
+        structure= np.dot(rotation, structure)
+        
+        return structure
