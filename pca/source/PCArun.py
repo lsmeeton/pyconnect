@@ -24,6 +24,7 @@ if __name__ == '__main__':
     # Convert config_space to selected basis set
     if pca.kw.basis == 'cartesian':
         pca.ReshapeCartesianIn()
+        pca.config_space_copy = pca.config_space.copy()
         pca.LstSqrStructureFit()
         pca.ReshapeCartesianOut()
 
@@ -38,6 +39,7 @@ if __name__ == '__main__':
     pca.PrintPCAVariance()
     pca.SavePCMatrix()
     pca.SaveEnsembleAverage()
+    pca.SaveMeanSigma()
 #    pc1 = pca.ReshapeVector(pca.PCs[0])
 #    print pca.PrintStructureXYZ(pc1)
 #    pca.PrintPCMatrix()

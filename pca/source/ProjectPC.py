@@ -12,6 +12,7 @@ Simple script which reads three files;
 import numpy as np
 import os
 import sys
+from PCAprep import MyPCAprep as PCA
 
 class Keyword():
     '''
@@ -28,6 +29,7 @@ class Keyword():
         
         self.pc = None
         self.ensemble_average_file = None
+        self.mu_sigma_file = None
 #        self.base_pc = None # This is the value of the
 
         self.n_atoms = None
@@ -94,6 +96,7 @@ class Keyword():
         self.pc_file = str(self.pc_file)
         self.pc = int(self.pc)
         self.ensemble_average_file = str(self.ensemble_average_file)
+        self.mu_sigma_file = str(self.mu_sigma_file)
         self.base_file = str(self.base_file)
         self.pdb_output = str(self.pdb_output)
         self.n_steps = int(self.n_steps)
@@ -118,6 +121,8 @@ class PC_project():
         # Read PCs from numpy binary
         self.PCs = np.load(self.kw.pc_file)
         self.ensemble_average = np.load(self.kw.ensemble_average_file)
+        self.config_mu = np.load(self.kw.mu_sigma_file)['arr_0']
+        self.config_sigma = np.load(self.kw.mu_sigma_file)['arr_1']
         
         # Initialise xyz vectors
         self.pc_xyz = self.Initxyz()
@@ -298,28 +303,35 @@ class PC_project():
         '''
         # First rotates 'structure' be oriented as closely as possible to the 
         # ensemble mean structure, self.ensemble_average
-        print 'structure 1'
-        print structure
-        self.structure = np.swapaxes(structure, 0, 1)
-        print 'structure 2'
-        print self.structure
-        self.CentreOfMass()
-        print 'CoM'
-        print self.structure
+#        print 'structure 1'
+#        print structure
+#        self.structure = np.swapaxes(structure, 0, 1)
+        pca = PCA('dummy')
+        PCA.ensemble_average = self.ensemble_average
+        structure = np.array(structure)
+        structure = structure.reshape(1,self.kw.n_atoms,3)
+        structure = structure.swapaxes(1,2)
+    #        structure = PCA.Calc
+#        structure = PCA.CalcRotate(structure)
+#        print 'structure 2'
+#        print self.structure
+#        self.CentreOfMass()
+#        print 'CoM'
+#        print self.structure
 #        print np.shape(self.structure), np.shape(self.ensemble_average.T)
-        self.U = np.dot(self.structure,self.ensemble_average.T)
+#        self.U = np.dot(self.structure,self.ensemble_average.T)
 #        print np.shape(self.U)
-        H, D, KT = np.linalg.svd(self.U)
-
-        K = KT.T
-        self.H, self.D, self.K = H, D, K
-            
-        # Calculate rotation matrix and rotate.
-        self.Rotate()
-#        self.structure = np.swapaxes(self.structure, 0, 1)
-        self.structure = np.ndarray.flatten(self.structure.T,order='C')
-
-        
+#        H, D, KT = np.linalg.svd(self.U)
+#
+#        K = KT.T
+#        self.H, self.D, self.K = H, D, K
+#            
+#        # Calculate rotation matrix and rotate.
+#        self.Rotate()
+##        self.structure = np.swapaxes(self.structure, 0, 1)
+#        self.structure = np.ndarray.flatten(self.structure.T,order='C')
+#
+#        
         self.single_point = np.dot(self.PCs,self.structure.T) 
     
     def CentreOfMass(self):

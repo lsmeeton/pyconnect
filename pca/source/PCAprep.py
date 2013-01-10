@@ -209,12 +209,9 @@ class MyPCAprep(PCAinit):
             # Calculate a 1D [n_min] narray of the residue for each structure
             self.Residue()
         
-        #In this loop, calculate and perform the rotation matrix for each 
-        # structure in the ensemble relative to the ensemble mean
+            # In this loop, calculate and perform the rotation matrix for each 
+            # structure in the ensemble relative to the ensemble mean
             for j in range(self.n_min): 
-
-#                structure = self.config_space[j,:,:]
-                
 
                 self.config_space[j,:,:] = self.CalcRotate(self.config_space[j,:,:])    
 
@@ -226,11 +223,13 @@ class MyPCAprep(PCAinit):
             diff_ensemble_average = np.linalg.norm(new_ensemble_average 
                                                    - self.ensemble_average)
 
+            self.ensemble_average = new_ensemble_average
+
             # If difference is below critical value, exit loop
             if diff_ensemble_average < self.kw.conv:
-                print 'Average structure converged, norm of difference between ensemble averages after%i iterations: %3.8f'%(i+1, diff_ensemble_average)
+                print 'Average structure converged, norm of difference between ensemble averages after %i iterations: %3.8f'%(i+1, diff_ensemble_average)
                 break
-            self.ensemble_average = new_ensemble_average
+            
 
             print 'Norm of difference between ensemble averages after %i iterations: %3.8f'%(i+1, diff_ensemble_average)
         
@@ -242,25 +241,46 @@ class MyPCAprep(PCAinit):
         to zero 
         '''
         for i in range(self.n_min):
-            CoM = (1.0/self.kw.n_atoms)*(np.sum(self.config_space[i,:,:], 
-                                             axis = 1))
-            self.config_space[i,:,:] = (self.config_space[i,:,:] - 
-                                        CoM.reshape([3,1]))
+            structure = self.config_space[i,:,:]
+
+            self.config_space[i,:,:] = self.CalcCentreOfMass(structure)
+            
+    def CalcCentreOfMass(self,structure):
+        '''
+        
+        '''
+        CoM = (1.0/self.kw.n_atoms)*(np.sum(structure, axis = 1))
+
+        structure = (structure - CoM.reshape([3,1]))
+
+        return structure
             
     def Residue(self):
         '''
         Calculate a 1D [n_min] narray of the residue for each structure
         '''
+        
         self.structure_residue = np.zeros(self.n_min)
         atom_residue = np.zeros(self.kw.n_atoms)
     
         for i in range(self.n_min):
-            for j in range(self.kw.n_atoms):
-                diff = self.config_space[i,:,j] - self.ensemble_average[:,j]
-                atom_residue[j] = np.dot(diff, diff)
+            atom_residue = self.CalcResidue(self.config_space[i])
+            
 
-        self.structure_residue[i] = 0.5*np.sum(atom_residue)
+            self.structure_residue[i] = 0.5*np.sum(atom_residue)
         
+    def CalcResidue(self, structure):
+        '''
+        Calculates residue of "structure" and returns residue
+        '''
+        atom_residue = np.zeros(self.kw.n_atoms)
+        
+        for j in range(self.kw.n_atoms):
+            diff = structure[:,j] - self.ensemble_average[:,j]
+            atom_residue[j] = np.dot(diff, diff)
+        
+        return atom_residue
+    
     def CalcRotate(self, structure):
         '''
         

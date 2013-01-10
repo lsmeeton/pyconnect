@@ -90,6 +90,13 @@ class PCAprint(PCA):
         np.save(self.kw.PC_coords_dir_name + 
                 '/ensemble.structure.npy', self.ensemble_average)
         
+    def SaveMeanSigma(self):
+        '''
+        save self.config_mu and self.config_sigma as a .npx file called "mu_sigma.npz"
+        '''
+        np.savez(self.kw.PC_coords_dir_name +
+                 '/mu_sigma.npz', self.config_mu, self.config_sigma)
+        
     def PrintStructureXYZ(self,structure):
         '''
         Takes as input a 2D [3][n_atoms] np array and converts it to a string 
