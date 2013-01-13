@@ -392,7 +392,14 @@ class DisconnectPlot(Disconnect):
         colour_dict = {1:(1.0,0.0,0.0), #red
                        2:(0.0,1.0,0.0), #blue
                        3:(0.0,0.0,1.0), #green
-                       4:(0.5,0.0,0.5)} #purple
+                       4:(0.5,0.0,0.5), #purple
+                       5:(0.5,0.5,0.0)}
+#        i=1
+#        for colour in color.cnames:
+#            colour_rgb = color.colorConverter.to_rgb(colour)
+#            colour_dict[i] = colour_rgb
+#            i += 1
+        
         col = 1
         for f in self.kw.trmin['trmin_file']:
             
@@ -703,9 +710,9 @@ class DisconnectPlot(Disconnect):
         Swaps the locations of basins b1 and b2 and level l, who share a parent 
         p at level l-1.
         '''
-        pcheck = self.basin_index['Level'][l-1]['Basin'][p].has_key()
-        p1 = self.basin_index['Level'][l]['Basin'][b1]['Parent']
-        p2 = self.basin_index['Level'][l]['Basin'][b2]['Parent']
+        pcheck = self.basin_index['Level'][l-1]['Basin'].has_key(p)
+        p1 = self.basin_index['Level'][l]['Basin'][b1]['Parents']
+        p2 = self.basin_index['Level'][l]['Basin'][b2]['Parents']
         if p1 == p and p2 ==p and pcheck:
             f1 = self.basin_index['Level'][l]['Basin'][b1]['FirstClmn']
             l1 = self.basin_index['Level'][l]['Basin'][b1]['LastClmn']
@@ -714,5 +721,26 @@ class DisconnectPlot(Disconnect):
             f2 = self.basin_index['Level'][l]['Basin'][b2]['FirstClmn']
             l2 = self.basin_index['Level'][l]['Basin'][b2]['LastClmn']
             s2 = self.basin_index['Level'][l]['Basin'][b2]['Size']
+            
+            s_diff = s1 - s2 # difference in sizes of basins
+            
+            # Make a list of basins at level l which will be affected by change
+            change_lst = []
+            for c in self.basin_index['Level'][l-1]['Basin'][p]['Children']:
+                high = self.basin_index['Level'][l]['Basin'][c]['LastClmn']
+                low = self.basin_index['Level'][l]['Basin'][c]['FirstClmn']
+                
+                if (high >= f1 or high >= f2): change_lst.append(c)
+                elif (low <= l1 or low <= l2): change_lst.append(c)
+            
+            # Iterate over change_lst, changing postions as required
+            
+            self.basin_index['Level'][l]['Basin'][b1]['FirstClmn'] = f2
+            self.basin_index['Level'][l]['Basin'][b1]['LastClmn'] = l2
+            
+            self.basin_index['Level'][l]['Basin'][b2]['FirstClmn'] = f2
+            self.basin_index['Level'][l]['Basin'][b2]['LastClmn'] = l1
+            
+            
             
             
