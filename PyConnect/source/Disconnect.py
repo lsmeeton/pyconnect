@@ -39,6 +39,24 @@ class Disconnect():
 
         #self.InitialiseBasin()
         
+    def init(self):
+        '''
+        Works as __init__ above, but can be called to re-initialise when being 
+        used interactively.
+        '''
+        self.InitialiseMin()
+        self.InitialiseTS()
+        self.CountMin()
+        self.CountTS()
+        self.RemoveThreshold()
+        self.RemoveUnderConnect()
+        self.RemoveDisjoint()
+        self.InitialiseBasin()
+        self.AssignBasins()
+        self.PruneBasins()
+        self.ReNumberBasins()
+        self.GgetParentsAndChildren()
+        self.GetNodeSize()
 #--------------------------------------------------------------------#
          
     def InitialiseMin(self):
@@ -181,6 +199,7 @@ class Disconnect():
         '''
         
         '''
+        print 'Assigning Minima to Basins'
         for level in self.basin_index['Level']:
             energy_threshold = self.EnergyThreshold(level)
 
@@ -198,7 +217,9 @@ class Disconnect():
                 self.AssignByMin(level, indice)
                         
                 self.AssignMinToBasin(level, indice)
-        
+                
+            print '%d basins at energy %2.2f'%(self.basin_index['Level'][level]['No. of Basins'],
+                                               self.basin_index['Level'][level]['Energy'])
 #--------------------------------------------------------------------#
 
     def EnergyThreshold(self,level):
