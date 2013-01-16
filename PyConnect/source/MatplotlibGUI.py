@@ -57,6 +57,9 @@ class DGCanvasFrame():
             self.AddColourBar()
 
         self.IdentifyMin()
+        
+        if self.disc.kw.identify_node:
+            self.IdentifyBasinSize()
             
         
 
@@ -122,6 +125,19 @@ class DGCanvasFrame():
             else:
                 z = self.disc.basin_index['Level'][l]['Energy']      
             self.ax.text(x,z,label)
+            
+    def IdentifyBasinSize(self):
+        '''
+        Identifies basins according to a size criterion specified by
+        '''
+        for l in self.disc.basin_index['Level']:
+            for b in self.disc.basin_index['Level'][l]['Basin']:
+                s = self.disc.basin_index['Level'][l]['Basin'][b]['Size']
+                max_min = self.disc.kw['identify_node']['max_min']
+                if s >= max_min:
+                    x = self.disc.basin_index['Level'][l]['Basin'][b]['X']
+                    y = self.disc.basin_index['Level'][l]['Energy']
+                    self.ax.text(x,y,'%d, %d, %d'%(l,b,s))
  
     def PlotDG(self):
         self.plot_listy = []

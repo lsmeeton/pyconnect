@@ -51,7 +51,7 @@ class Keywords(dict):
             self['connectmin'] = self.ConnectminRead()
             self['colourprint'] = [],
             self['identify'] = [],
-            self['identify_node'] = [],
+            self['identify_node'] = self.IdentifyNodeRead()
             self['identify_node_size'] = [],
             self['idmin'] = self.IdminRead()
             self['labelformat'] = [],
@@ -253,7 +253,27 @@ class Keywords(dict):
                 print 'ERROR'
 
             return dict(connectmin = keyword[1])
-
+        
+    def IdentifyNodeRead(self):
+        '''
+        IDENTIFY_NODE <max_min>
+        If present, the nodes are labelled with the format N1_N2, where N1 is 
+        the number of level, N2 is the number of the node at that level. The 
+        label is only printed if the number of minima below that node is 
+        GREATER than <max_min>. With this info you can pick the number of 
+        minima correspondig to that node from the node_numbers file, produced 
+        by using the keyword DUMPNUMBERS... (and then print any branch of the 
+        graph separately)
+        '''
+        keyword = self.ReadDinfo('identify_node')
+        if keyword:
+            try:
+                keyword[1] = int(keyword[1])
+            except:
+                print 'ERROR'
+                
+            return dict(max_min = keyword[1])
+        
     def IdminRead(self):
         '''
         IDMIN <min>                                                                                                                                   

@@ -18,8 +18,11 @@ class DisconnectPlot(Disconnect):
         '''
         DisconnectPlot 
         '''
-        #self.PositionBasins()
-        #print hasattr(self,'basin_index')#['Level'])
+        # trmin_dict is a dictionary of lists for identifying which minima 
+        # belong to a particular group. The key is an (r,g,b) tuple, and the item
+        # is the list of minima within that group.
+        self.trmin_dict = {} 
+
         
     def PositionBasins(self):
         '''
@@ -411,8 +414,11 @@ class DisconnectPlot(Disconnect):
                                             
                     self.minima_index['Index'][m]['Colour']['RGB'] = \
                         colour_dict[col]
-                
-
+                    try:
+                        self.trmin_dict[colour_dict[col]].append(m)
+                    except KeyError:
+                        self.trmin_dict[colour_dict[col]] = [m]
+                        
             for l in self.basin_index['Level']:
                 for b in self.basin_index['Level'][l]['Basin']:
                     #temp_y = []
