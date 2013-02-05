@@ -12,7 +12,10 @@ Simple script which reads three files;
 import numpy as np
 import os
 import sys
-from PCAprep import MyPCAprep as PCA
+#from PCAprep import MyPCAprep as PCA
+from PCAprint import PCAprint
+
+__metaclass__ = type
 
 class Keyword():
     '''
@@ -103,7 +106,7 @@ class Keyword():
         self.parm_min = float(self.parm_min)
         self.parm_max = float(self.parm_max)
 
-class PC_project():
+class PC_project(PCAprint):
     '''
         
     '''
@@ -244,7 +247,18 @@ class PC_project():
         Projects self.pc_xyz onto self.base_xyz by parameter t and saves in 
         self.projection_xyz
         '''
-        self.projection_xyz = self.base_xyz + t*self.pc_xyz
+        mu = self.config_mu.reshape(1,self.kw.n_atoms,3)#.swapaxes(1,2)
+        sigma = self.config_sigma.reshape(1,self.kw.n_atoms,3)#.swapaxes(1,2)
+        self.projection_xyz = self.base_xyz + t*(self.pc_xyz*sigma[0] + mu[0])
+        
+    def ZeroProject(self):
+        '''
+        Updates base such that self.base_xyz has a self.pc_xyz component = 0.
+        '''
+        mu = self.config_mu.reshape(1,self.kw.n_atoms,3)#.swapaxes(1,2)
+        sigma = self.config_sigma.reshape(1,self.kw.n_atoms,3)#.swapaxes(1,2)
+        print 'single point', self.single_point[self.kw.pc -1]
+        self.base_xyz = self.base_xyz - self.single_point[self.kw.pc - 1]*(self.pc_xyz*sigma[0] + mu[0])
         
     def pdbMake(self):
         '''
@@ -289,9 +303,11 @@ class PC_project():
         and self.kw.parm_max
         '''
         step_size = (self.kw.parm_max - self.kw.parm_min)/self.kw.n_steps
-        t = self.kw.parm_min
+        
         for i in range(self.kw.n_steps + 1):
+            t = self.kw.parm_min
             t += i*step_size
+            print t, i, step_size
             self.Project(t)
             self.pdbGenerateName(self.kw.pdb_output, i)
             self.pdbMake()
@@ -303,108 +319,32 @@ class PC_project():
         '''
         # First rotates 'structure' be oriented as closely as possible to the 
         # ensemble mean structure, self.ensemble_average
-#        print 'structure 1'
-#        print structure
-#        self.structure = np.swapaxes(structure, 0, 1)
-        pca = PCA('dummy')
-        PCA.ensemble_average = self.ensemble_average
+       
         structure = np.array(structure)
         structure = structure.reshape(1,self.kw.n_atoms,3)
         structure = structure.swapaxes(1,2)
-    #        structure = PCA.Calc
-#        structure = PCA.CalcRotate(structure)
-#        print 'structure 2'
-#        print self.structure
-#        self.CentreOfMass()
-#        print 'CoM'
-#        print self.structure
-#        print np.shape(self.structure), np.shape(self.ensemble_average.T)
-#        self.U = np.dot(self.structure,self.ensemble_average.T)
-#        print np.shape(self.U)
-#        H, D, KT = np.linalg.svd(self.U)
-#
-#        K = KT.T
-#        self.H, self.D, self.K = H, D, K
-#            
-#        # Calculate rotation matrix and rotate.
-#        self.Rotate()
-##        self.structure = np.swapaxes(self.structure, 0, 1)
-#        self.structure = np.ndarray.flatten(self.structure.T,order='C')
-#
-#        
-        self.single_point = np.dot(self.PCs,self.structure.T) 
-    
-    def CentreOfMass(self):
-        '''
-        Calculate Centre of Mass for self.ensemble_average and self.structure, 
-        and transform of self.structure to that of self.ensemble_average. 
-        '''
-        
-        CoMensemble = (1.0/self.kw.n_atoms)*(np.sum(self.ensemble_average, 
-                                             axis = 1))
-        CoMstructure = (1.0/self.kw.n_atoms)*(np.sum(self.structure, 
-                                             axis = 1))
-        self.structure = (self.structure + CoMensemble.reshape([3,1])
-                          - CoMstructure.reshape([3,1]))
-        print CoMensemble, CoMstructure#, (1.0/self.kw.n_atoms)*(np.sum(self.structure,axis = 1))
-    
-    def Rotate(self):
-        ''' 
-        Calculate rotation matrix according to selection rules, and act on 
-        matrix structure 
-        '''
-    
-        if (self.D[2] == 0):
-            if (self.D[1] == 0):
-                sys.exit('ERROR: All atoms are in a line')
-            sys.exit('ERROR: All atoms are in a plane')
-    
-        # Caclulate determinant of U
-        detU = np.linalg.det(self.U)
-    
-        K = np.matrix(self.K)
-        H = np.matrix(self.H)
-    
-        if (detU > 0):
-            rotation = np.dot(K[:,0],H[:,0].T) + np.dot(K[:,1],H[:,1].T) \
-            + np.dot(K[:,2],H[:,2].T)
-    
-        if (detU < 0):
-            if (self.D[1] == self.D[2]):
-                sys.exit('ERROR: D[1] == D[2]')
-            rotation = np.dot(K[:,0],H[:,0].T) + np.dot(K[:,1],H[:,1].T) \
-            - np.dot(K[:,2],H[:,2].T)
-    
-        print np.shape(rotation)
-        self.structure= np.dot(rotation, self.structure)
 
-#    def ReadMatrix(self):
-#        '''
-#        A thrown together function to read co-ordinate matrix for projection
-#        purposes
-#        '''
-#        self.PCs = np.zeros([3*self.kw.n_atoms,3*self.kw.n_atoms])
-##        f = open('self.PCsMatrix','r')
-#        i = 0
-#        j = 0
-#        for line in open('self.PCsMatrix','r'):
-#            line = line.split()
-#            for n in line:
-##                print i, j, np.shape(self.PCs)
-#                self.PCs[i,j] = float(n)
-#                j += 1
-#            j = 0
-#            i += 1
+        structure[0] = self.CalcCentreOfMass(structure[0])
+        structure[0] = self.CalcRotate(structure[0])
+        structure[0] = structure[0] - self.ensemble_average
+
+        structure = structure.swapaxes(1,2)
+        structure = structure.flatten()
+        structure = (structure - self.config_mu)/self.config_sigma
+
+        self.single_point = np.dot(self.PCs,structure.T) 
 
 
 if __name__ == '__main__':
     kw = Keyword()
     pc = PC_project(kw)
 
-    b = np.load('PC_coords/PCs.npy')
-    a = b[0]
-    a = np.swapaxes(a, 0, 1)
-#    print a
-    pc.SetProjectionCoord()
+#    b = np.load('PC_coords/PCs.npy')
+#    a = b[0]
+#    a = np.swapaxes(a, 0, 1)
+
     pc.PCSinglePoint(pc.base_xyz)
-    print pc.single_point[0]
+    pc.ZeroProject()
+    
+    pc.SetProjectionCoord()
+
