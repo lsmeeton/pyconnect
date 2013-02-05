@@ -1,10 +1,10 @@
 import sys
 import os
 import numpy as np
-import array
-import lewismod
+#import array
+#import lewismod
 import structure_read
-import matplotlib.mlab as mlab
+#import matplotlib.mlab as mlab
 
 __metaclass__ = type
 
@@ -77,7 +77,14 @@ class PCAinit():
         self.CountLines()
         
     def CountLines(self):
-        self.total_min = lewismod.count_lines(self.kw.min_file)
+        num_lines = 0
+
+        with open(self.kw.min_file, 'r') as f:
+                for line in f:
+                        num_lines += 1
+        
+
+        self.total_min = num_lines# lewismod.count_lines(self.kw.min_file)
         print 'No. of minima: %i'%self.total_min
         
     def BasisCheck(self):
