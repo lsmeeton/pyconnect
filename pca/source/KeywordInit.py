@@ -11,11 +11,11 @@ class Keyword():
     dictionary
     '''
     
-    def __init__(self):
+    def __init__(self,inpt):
         super(Keyword, self).__init__()
         
         # Initialise attributes
-        self.input_file = 'pca_inpt'
+        self.input_file = inpt#'pca_inpt'
         self.conv = 10E-7 # Convergence criteria for rotational invariance 
         # procedure.
         # By default 10E-7
@@ -36,7 +36,7 @@ class Keyword():
         self.basis = None
         
         self.beta = None
-                
+
         
         self.PC_coords_dir_name = 'PC_coords'
         self.PC_project_dir_name = 'PC_projections'
@@ -99,6 +99,7 @@ class Keyword():
         self.iterations = int(self.iterations) 
         self.min_file = str(self.min_file)
         self.n_atoms = int(self.n_atoms)
+        self.points = str(self.points)
         self.basis = str(self.basis)
         if self.beta: self.beta = float(self.beta)
         self.PC_coords_dir_name = str(self.PC_coords_dir_name)

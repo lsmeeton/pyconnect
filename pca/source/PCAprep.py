@@ -23,7 +23,7 @@ class MyPCAprep(PCAinit):
 #        if self.basis == 'cartesian':
 #            self.ReshapeCartesianIn()
 #            self.LstSqrStructureFit()
-#            self.ReshapeCartesianOut()
+#            self.ReshapeCartesian3D2D()
 #
 #        if self.basis == 'dihedral':
 #            print 'Converting to Internal Dihedrals'
@@ -78,7 +78,7 @@ class MyPCAprep(PCAinit):
     
     # Functions that reshape config_space array
 
-    def ReshapeCartesianIn(self):
+    def ReshapeCartesian1D3D(self):
         '''
         Converts config_space from a 1D [n_min*n_atoms*3] array to 
         a 3D [n_min][3][n_atoms] numpy array of cartesian co-ordinates
@@ -89,7 +89,7 @@ class MyPCAprep(PCAinit):
         self.config_space = np.swapaxes(self.config_space,1,2)
         self.shape = np.shape(self.config_space)
 
-    def ReshapeCartesianOut(self):
+    def ReshapeCartesian3D2D(self):
         '''
         Converts config_space from a 3D [n_min][3][n_atoms] numpy array to a 
         [n_min][3*n_atoms] numpy array
@@ -99,6 +99,16 @@ class MyPCAprep(PCAinit):
         self.config_space = self.config_space.reshape(self.n_min,3*self.kw.n_atoms)
         self.shape = np.shape(self.config_space)
 
+    def ReshapeCartesian2D3D(self):
+        '''
+        Converts config_space from a 2D [n_min][3*n_atoms] numpy array to a 
+        3D [n_min][3][n_atoms] numpy array
+        '''
+        self.config_space = self.config_space.flatten()
+        self.config_space = self.config_space.reshape(self.n_min,
+                                                      3,
+                                                      self.kw.n_atoms)
+#        self.config_space = self.config_space.swapaxes(1,2)
         
     def ReshapeDihedral(self):
         '''
@@ -108,7 +118,7 @@ class MyPCAprep(PCAinit):
         '''
         # Initially convert into 3D [n_min][3][n_atoms] numpy array of 
         # cartesian co-ordinates 
-        self.ReshapeCartesianIn()
+        self.ReshapeCartesian1D3D()
         self.ConvertDihedrals()
         self.shape = np.shape(self.config_space)
         
@@ -250,7 +260,7 @@ class MyPCAprep(PCAinit):
         
         '''
         CoM = (1.0/self.kw.n_atoms)*(np.sum(structure, axis = 1))
-
+        
         structure = (structure - CoM.reshape([3,1]))
 
         return structure

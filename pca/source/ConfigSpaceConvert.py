@@ -5,9 +5,13 @@ from PCAprint import PCAprint
 #from PCAprep import MyPCAprep
 #from PCAinit import PCAinit
 from KeywordInit import Keyword
+import numpy as np
 
 if __name__ == '__main__':
-    kw = Keyword()
+    
+    inpt = 'convert_inpt'
+    
+    kw = Keyword(inpt)
     pca = PCAprint(kw)
     
     pca.DirectoryCheck()
@@ -23,25 +27,16 @@ if __name__ == '__main__':
 #    pca.basis = 'dihedral'
     # Convert config_space to selected basis set
     if pca.kw.basis == 'cartesian':
-        pca.ReshapeCartesianIn()
-        pca.config_space_copy = pca.config_space.copy()
+
+        pca.ReshapeCartesian1D3D()
+
         pca.LstSqrStructureFit()
-        pca.ReshapeCartesianOut()
+        pca.ReshapeCartesian3D2D()
 
     if pca.kw.basis == 'dihedral':
         print 'Converting to Internal Dihedrals'
         pca.ReshapeDihedral()
         print 'Done'
-    
-pca.SaveConfigSpace()
-#    pca.runPCA()
-#    pca.PrintPCACartesianCoords()
-#    pca.PrintPCAProjections()
-#    pca.PrintPCAVariance()
-#    pca.SavePCMatrix()
-#    pca.SaveEnsembleAverage()
-#    pca.SaveMeanSigma()
-#    pc1 = pca.ReshapeVector(pca.PCs[0])
-#    print pca.PrintStructureXYZ(pc1)
-#    pca.PrintPCMatrix()
-#    print pca.PCs[0,1:3]
+        
+
+    pca.SaveConfigSpace()

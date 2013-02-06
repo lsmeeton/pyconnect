@@ -7,7 +7,10 @@ from PCAprint import PCAprint
 from KeywordInit import Keyword
 
 if __name__ == '__main__':
-    kw = Keyword()
+    
+    inpt = 'pca_inpt'
+    
+    kw = Keyword(inpt)
     pca = PCAprint(kw)
     
     pca.DirectoryCheck()
@@ -23,10 +26,13 @@ if __name__ == '__main__':
 #    pca.basis = 'dihedral'
     # Convert config_space to selected basis set
     if pca.kw.basis == 'cartesian':
-        pca.ReshapeCartesianIn()
-        pca.config_space_copy = pca.config_space.copy()
+        if pca.kw.points[-4:] == '.npy':
+            pca.ReshapeCartesian2D3D()
+        else:
+            pca.ReshapeCartesian1D3D()
+#        pca.config_space_copy = pca.config_space.copy()
         pca.LstSqrStructureFit()
-        pca.ReshapeCartesianOut()
+        pca.ReshapeCartesian3D2D()
 
     if pca.kw.basis == 'dihedral':
         print 'Converting to Internal Dihedrals'
