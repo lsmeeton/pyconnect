@@ -216,31 +216,24 @@ class DisconnectPlot(Disconnect):
             m = int(line[0])
             x = float(line[1])
 
-            try: 
+
+            if self.minima_index['Index'].has_key(m):
                 self.minima_index['Index'][m]['Metric']['x'] = x
                 if x > self.basin_index['MaxX']: 
                     self.basin_index['MaxX'] = x
                 if x < self.basin_index['MinX']:
                     self.basin_index['MinX'] = x
-            except KeyError:
-                print self.kw.metric['metric_file'] 
-                print('Minimum %d in file "%s" but not in file "%s"'
-                      %(m,
-                        self.kw.metric['metric_file'],
-                        self.kw.minima['data_file']))
-#                print self.minima_index['Index'][m ]
-                sys.exit()
-
                 
         
         for l in self.basin_index['Level']:
             for b in self.basin_index['Level'][l]['Basin']:
                 temp = []
+
                 for m in self.basin_index['Level'][l]['Basin'][b]\
                     ['Min']:
                     temp.append(self.minima_index['Index'][m]
                                 ['Metric']['x'])
-                #print temp
+
                 self.basin_index['Level'][l]['Basin'][b]\
                     ['MetricX'] = np.mean(temp)
                     
@@ -393,10 +386,11 @@ class DisconnectPlot(Disconnect):
         # Initialise a colour dictionary ===> so far only have 4
         # colours to chose from
         colour_dict = {1:(1.0,0.0,0.0), #red
-                       2:(0.0,1.0,0.0), #blue
-                       3:(0.0,0.0,1.0), #green
-                       4:(0.5,0.0,0.5), #purple
-                       5:(0.5,0.5,0.0)}
+                       2:(0.0,0.0,1.0), #blue
+                       3:(0.0, 0.5019607843137255, 0.0), #green
+                       4:(0.5019607843137255, 0.0, 0.5019607843137255), #purple
+                       5:(1.0, 0.6470588235294118, 0.0), #orange
+                       6:(0.0, 0.0, 0.5019607843137255)} #navy
 #        i=1
 #        for colour in color.cnames:
 #            colour_rgb = color.colorConverter.to_rgb(colour)
@@ -419,17 +413,25 @@ class DisconnectPlot(Disconnect):
                     except KeyError:
                         self.trmin_dict[colour_dict[col]] = [m]
                         
-            for l in self.basin_index['Level']:
-                for b in self.basin_index['Level'][l]['Basin']:
-                    #temp_y = []
-                    for m in self.basin_index['Level'][l]['Basin'][b]\
-                    ['Min']:
-                        self.basin_index['Level'][l]['Basin'][b]\
-                            ['RGB'] =\
-                            self.minima_index['Index'][m]['Colour']\
-                            ['RGB']
+            self.AssignColoursToBasin(colour_dict[col])
+
             col += 1
             
+    def AssignColoursToBasin(self,col):
+        '''
+        
+        '''
+        if not self.trmin_dict.has_key(col):
+            print '%s not a key in trmin_dict'%col
+            sys.exit()
+        else:
+            for m in self.trmin_dict[col]:
+                for l, b in self.minima_index['Index'][m]['Basin']['Level'].items():
+                    if b: 
+                        self.basin_index['Level'][l]['Basin'][b]['RGB'] = col
+                    else:
+                        continue
+    
     def GetTrvalColours(self):
         '''
         Read Trval colours from file 'trval_file'
@@ -703,14 +705,131 @@ class DisconnectPlot(Disconnect):
         '''
         Changes the colour of a collection of minima defined using the trmin keyword
         '''
-        for l in self.basin_index['Level']:
-            for b in self.basin_index['Level'][l]['Basin']:
-                for m in self.basin_index['Level'][l]['Basin'][b]['Min']:
-                    rgb = self.basin_index['Level'][l]['Basin'][b]['RGB']
-                    if (rgb == colour_in):
-                            self.basin_index['Level'][l]['Basin'][b]['RGB'] = colour_out
-                                
+        # If colour_in/colour_out is a string, convert them to RGB tuple
+        
+        if type(colour_in) == str:
+            col = colors.ColorConverter()
+            try:
+                col_in = col.to_rgb(colour_in)
+            except ValueError:
+                print '"%s" not a recognised colour'%colour_in
+                sys.exit()
+            print '%s converted to: '%colour_in, col_in
+         
+        if type(colour_out) == str:
+            col = colors.ColorConverter()
+            try:
+                col_out = col.to_rgb(colour_out)
+            except ValueError:
+                print '"%s" not a recognised colour'%colour_out     
+                sys.exit()
+            print '%s converted to: '%colour_out, col_out
+        
+        # Check that colour_in is a valid key, and that there isn't an extant 
+        # colour_out
+        
+        if not self.trmin_dict.has_key(col_in): 
+            print '%s:%s trmin group not found'%(colour_in,col_in)
+            sys.exit()
+            
+        if self.trmin_dict.has_key(col_out): 
+            print '%s:%s already exists'%(colour_out,col_out)
+            sys.exit()
+            
+        # Change colour here!
+        # First copy trmin_dict[col_in] to trmin_dict[col_out]
+        self.trmin_dict[col_out] = self.trmin_dict[col_in][:]
+        
+        # Then delete trmin_dict[col_in]
+        del self.trmin_dict[col_in]
+        
+        # Update basin colours
+        self.AssignColoursToBasin(col_out)
+
+    def AddTrminColourList(self,colour,minima):
+        '''
+        To be used interactively, adds a new colour and list of minima to 
+        trmin_dict.
+        '''
+        # If colour_in/colour_out is a string, convert them to RGB tuple
+        if type(colour) == str:
+            col = colors.ColorConverter()
+            try:
+                col_in = col.to_rgb(colour)
+                print col_in
+            except ValueError:
+                print '"%s" not a recognised colour'%colour
+                sys.exit()
+            print '%s converted to: '%colour, col_in
+         
+        # Check that col_in doesn't already exist
+        if self.trmin_dict.has_key(col_in): 
+            print '%s:%s already exists'%(colour,col_in)
+            sys.exit()
     
+        # Add new colour
+        self.trmin_dict[col_in] = minima
+        
+        # Update basin colours
+        self.AssignColoursToBasin(col_in)
+        
+    def AddTrminColourBasin(self,colour,l,b):
+        '''
+        To be used interactively, adds a new colour for the minima at level l 
+        in basin b.
+        '''
+        # If colour_in/colour_out is a string, convert them to RGB tuple
+        if type(colour) == str:
+            col = colors.ColorConverter()
+            try:
+                col_in = col.to_rgb(colour)
+                print col_in
+            except ValueError:
+                print '"%s" not a recognised colour'%colour
+                sys.exit()
+            print '%s converted to: '%colour, col_in
+         
+        # Check that col_in doesn't already exist
+        if self.trmin_dict.has_key(col_in): 
+            print '%s:%s already exists'%(colour,col_in)
+            sys.exit()
+    
+        # Add new colour
+        self.trmin_dict[col_in] = self.basin_index['Level'][l]['Basin'][b]['Min']
+        
+        # Update basin colours
+        self.AssignColoursToBasin(col_in)
+        
+    def DelTrminColour(self,colour):
+        '''
+        To be used interactively, removes the trmin colour group "colour"
+        '''
+        # If colour_in/colour_out is a string, convert them to RGB tuple
+        if type(colour) == str:
+            col = colors.ColorConverter()
+            try:
+                col_in = col.to_rgb(colour)
+                print col_in
+            except ValueError:
+                print '"%s" not a recognised colour'%colour
+                sys.exit()
+            print '%s converted to: '%colour, col_in
+        
+        else: col_in = colour
+        
+        if not self.trmin_dict.has_key(col_in):
+            print '%s not a key in trmin_dict'%col_in
+            sys.exit()
+        else:
+            for m in self.trmin_dict[col_in]:
+                for l, b in self.minima_index['Index'][m]['Basin']['Level'].items():
+                    if b: 
+                        self.basin_index['Level'][l]['Basin'][b]['RGB'] = (0,0,0)# black
+                    else:
+                        continue
+        
+        del self.trmin_dict[col_in]
+                    
     def SwapBasinLocation(self,b1,b2,l,p):
         '''
         Swaps the locations of basins b1 and b2 and level l, who share a parent 
@@ -728,7 +847,9 @@ class DisconnectPlot(Disconnect):
             l2 = self.basin_index['Level'][l]['Basin'][b2]['LastClmn']
             s2 = self.basin_index['Level'][l]['Basin'][b2]['Size']
             
-            s_diff = s1 - s2 # difference in sizes of basins
+            delta_s = s1 - s2 # difference in sizes of basins
+            delta_f = f1 - f2
+            delta_l = l1 - l2
             
             # Make a list of basins at level l which will be affected by change
             change_lst = []
@@ -736,16 +857,70 @@ class DisconnectPlot(Disconnect):
                 high = self.basin_index['Level'][l]['Basin'][c]['LastClmn']
                 low = self.basin_index['Level'][l]['Basin'][c]['FirstClmn']
                 
-                if (high >= f1 or high >= f2): change_lst.append(c)
-                elif (low <= l1 or low <= l2): change_lst.append(c)
+                if (high <= max(f1,f2) and 
+                    low >= min(l1,l2)): change_lst.append(c)
+#                elif (low <= l1 or low <= l2): change_lst.append(c)
+            
+#            delta_level = self.kw.levels - l + 1 # No. of levels below l (including itself)
+            
+        self.basin_index['Level'][l]['Basin'][b1]['FirstClmn'] -= delta_l
+        self.basin_index['Level'][l]['Basin'][b1]['LastClmn'] -= delta_l
+            
+        self.basin_index['Level'][l]['Basin'][b2]['FirstClmn'] += delta_f
+        self.basin_index['Level'][l]['Basin'][b2]['LastClmn'] += delta_f
+            
+        self.OpenGLCoordsDisconnect(l, b1)
+        self.OpenGLCoordsDisconnect(l, b2)
+        
+#        print f1,l1,s1,f2,l2,s2,s_diff,change_lst
+        print l1, l2, delta_l
+        print f1, f2, delta_f
+        print s1, s2, delta_s
+        
+        new_change_lst = []
+        for c in change_lst:
+            self.basin_index['Level'][l]['Basin'][c]['LastClmn'] -= delta_s
+            self.OpenGLCoordsDisconnect(l, c)
+            new_change_lst += self.basin_index['Level'][l]['Basin'][c]['Children']
+        change_lst = new_change_lst[:]
+#        print change_lst
+            
+        b1_children = self.basin_index['Level'][l]['Basin'][b1]['Children']
+        b2_children = self.basin_index['Level'][l]['Basin'][b2]['Children']
+            
+        for level in range(l + 1, self.kw.levels['n'] + 1):
+            new_b1_children = []
+            for b in b1_children:
+                self.basin_index['Level'][level]['Basin'][b]['FirstClmn'] -= delta_l
+                self.basin_index['Level'][level]['Basin'][b]['LastClmn'] -= delta_l
+                self.OpenGLCoordsDisconnect(level, b)
+                new_b1_children += self.basin_index['Level'][level]['Basin'][b]['Children']
+                
+            b1_children = new_b1_children[:]
+#            print b1_children
+            new_b2_children = []
+            for b in b2_children:
+                self.basin_index['Level'][level]['Basin'][b]['FirstClmn'] += delta_f
+                self.basin_index['Level'][level]['Basin'][b]['LastClmn'] += delta_f
+                self.OpenGLCoordsDisconnect(level, b)
+                new_b2_children += self.basin_index['Level'][level]['Basin'][b]['Children']
+            b2_children = new_b2_children[:]
+            
+            new_change_lst = []
+            for c in change_lst:
+                self.basin_index['Level'][level]['Basin'][c]['LastClmn'] -= delta_s
+                self.basin_index['Level'][level]['Basin'][c]['FirstClmn'] -= delta_s
+                self.OpenGLCoordsDisconnect(level, c)
+                new_change_lst += self.basin_index['Level'][level]['Basin'][c]['Children']
+            change_lst = new_change_lst[:]
             
             # Iterate over change_lst, changing postions as required
-            
-            self.basin_index['Level'][l]['Basin'][b1]['FirstClmn'] = f2
-            self.basin_index['Level'][l]['Basin'][b1]['LastClmn'] = l2
-            
-            self.basin_index['Level'][l]['Basin'][b2]['FirstClmn'] = f2
-            self.basin_index['Level'][l]['Basin'][b2]['LastClmn'] = l1
+#            print f1,l1,s1,f2,l2,s2,s_diff,change_lst
+#            self.basin_index['Level'][l]['Basin'][b1]['FirstClmn'] = f2
+#            self.basin_index['Level'][l]['Basin'][b1]['LastClmn'] = l2
+#            
+#            self.basin_index['Level'][l]['Basin'][b2]['FirstClmn'] = f2
+#            self.basin_index['Level'][l]['Basin'][b2]['LastClmn'] = l1
             
             
             

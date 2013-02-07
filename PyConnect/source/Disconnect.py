@@ -689,7 +689,7 @@ class Disconnect():
         '''
         f = open(r'node_numbers','w')
         for l in self.basin_index['Level']:
-            f.write('LEVEL\t%d\n=========\n\n'%l)
+            f.write('LEVEL\t%d\tENERGY\t%2.2f\n=========\n\n'%(l,self.basin_index['Level'][l]['Energy']))
             for b in self.basin_index['Level'][l]['Basin']:
                 f.write('Node\t%d\n'%b)
                 for m in self.basin_index['Level'][l]['Basin'][b]['Min']:
@@ -705,7 +705,7 @@ class Disconnect():
         '''
         f = open(r'node_sizes','w')
         for l in self.basin_index['Level']:
-            f.write('LEVEL\t%d\n=========\n\n'%l)
+            f.write('LEVEL\t%d\tENERGY\t%2.2f\n=========\n\n'%(l,self.basin_index['Level'][l]['Energy']))
             for b in self.basin_index['Level'][l]['Basin']:
                 s = self.basin_index['Level'][l]['Basin'][b]['Size']
                 f.write('%d\t%d\n'%(b,s))
