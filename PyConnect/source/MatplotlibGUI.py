@@ -290,7 +290,7 @@ class MDGCanvasFrame():
         self.line_array.append(np.array([[x1,z1],[x2,z2]]))
         self.rgba_array.append(rgb)
 
-class MDG3DCanvasFrame():
+class MDG3DMayaCanvasFrame():
     def __init__(self,disc):
 
         
@@ -421,6 +421,99 @@ class MDG3DCanvasFrame():
         indx1 = self.plot_index[(l,b)]
         indx2 = self.plot_index[(l-1,p)]
         self.connections.append(np.array([indx1,indx2]))
+
+
+class MDG3DCanvasFrame():
+    def __init__(self,disc):
+
+        
+        self.disc = disc
+
+        self.init_plot()
+        
+                
+    def init_plot(self):
+        self.fig = plt.figure()
+        self.rgba_array = []
+#        self.fig = mlab.figure(1,bgcolor=(0.5, 0.5, 0.5))
+#        mlab.clf()
+
+        self.ax = self.fig.add_subplot(111, projection='3d')
+        
+
+#        self.ax.set_title('Metric Disconnectivity Graph')
+        
+        self.FormatAxes()
+
+        self.PlotMDG()
+        if self.disc.kw.trval['trval_file']:
+            self.cax, kw = matplotlib.colorbar.make_axes(self.ax)
+            
+            cb1=matplotlib.colorbar.ColorbarBase(self.cax,cmap=self.disc.col_map,
+                                                 norm=self.disc.norm,
+                                                 orientation='vertical')
+            cb1.set_label(self.disc.kw['colour_bar_label']['label'])
+        
+    def FormatAxes(self):
+        '''
+        Format axes (ie. determine location and add labels)
+        '''
+        
+
+        if self.disc.kw['energy_label']['label']: 
+            self.ax.set_zlabel(self.disc.kw['energy_label']['label'])
+            
+        if self.disc.kw['q1']['label']:
+            self.ax.set_xlabel(self.disc.kw['q1']['label'])
+        
+        if self.disc.kw['q2']['label']:
+            self.ax.set_ylabel(self.disc.kw['q2']['label'])
+   
+    def PlotMDG(self):
+        for l in self.disc.basin_index['Level']:
+            if l == 1: continue
+            for b in self.disc.basin_index['Level'][l]['Basin']:
+                c = self.disc.basin_index['Level'][l]['Basin'][b]\
+                    ['Children']
+                p = self.disc.basin_index['Level'][l]['Basin'][b]\
+                    ['Parents']
+                self.LinesMDG(l,b,c,p)
+
+
+    def LinesDG(self,l,b,c,p):
+        rgb = self.disc.basin_index['Level'][l]['Basin'][b]['RGB']
+
+        x1 = self.disc.basin_index['Level'][l-1]['Basin'][p]['X']
+
+        z1 = 1.0*(self.disc.basin_index['Level'][l-1]['Energy'])
+        x2 = self.disc.basin_index['Level'][l]['Basin'][b]['X']
+
+        if not c:
+            z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
+        else:
+            z2 = self.disc.basin_index['Level'][l]['Energy']      
+        self.plot_dataDG = self.ax.plot([x1,x2],[z1,z2], color =rgb, linewidth=0.2)
+    
+
+    def LinesMDG(self,l,b,c,p):
+        rgb = self.disc.basin_index['Level'][l]['Basin'][b]['RGB']
+
+        x1 = self.disc.basin_index['Level'][l-1]['Basin'][p]['MetricX']
+        y1 = self.disc.basin_index['Level'][l-1]['Basin'][p]['MetricY']
+        z1 = 1.0*(self.disc.basin_index['Level'][l-1]['Energy'])
+
+        x2 = self.disc.basin_index['Level'][l]['Basin'][b]['MetricX']
+        y2 = self.disc.basin_index['Level'][l]['Basin'][b]['MetricY']
+        if not c:
+            z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
+
+        else:
+            z2 = self.disc.basin_index['Level'][l]['Energy']#+0.5          
+        
+        self.plot_dataMDG = self.ax.plot([x1,x2],[y1,y2],[z1,z2], color =rgb,
+                                                linewidth=0.2)
+    
+
 
 
 if __name__ == '__main__':

@@ -74,6 +74,7 @@ class Keywords(dict):
             self['q2'] = self.Q2()
             self['colour_bar_label'] = self.ColourBarLabelRead()
             self['tex'] = self.TexRead()
+            self['maya'] = self.MayaRead()
 
             # Check minima file and TS file
             self.minima['data_file'] = self.FileCheck(
@@ -484,6 +485,16 @@ class Keywords(dict):
         Turns on latex rendering in matplotlib plots
         '''
         keyword = self.ReadDinfo('tex')
+        if keyword:
+            return True
+        else:
+            return False
+        
+    def MayaRead(self):
+        '''
+        Turns on mayavi for viewing 3D MDG
+        '''
+        keyword = self.ReadDinfo('maya')
         if keyword:
             return True
         else:
