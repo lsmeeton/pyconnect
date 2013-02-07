@@ -27,7 +27,7 @@ comment NCONNMIN 1
 # TRVAL 132356 PC_projections/PC_projections1
 # TRVAL 132356 native_contact_parameter
 comment TRVAL 132356 PCA_order_parameter_normal1
-TRMIN 4 132356 minima_input3 minima_input5 minima_input4 minima_input
+TRMIN 4 132356 input/minima_input3 input/minima_input5 input/minima_input4 input/minima_input
 comment TRMIN 2 132356 minima_input6 minima_input7 
 comment TRMIN 1 132356 neighbour_min
 comment TRMIN 1 132356 minima_input
@@ -45,9 +45,9 @@ comment METRIC3D native_contact_parameter PCA_order_parameter_normal1
 comment LANDSCAPE
 comment EPSILON
 # COLOUR_BAR_LABEL "Fraction of Native Contacts"
-# ENERGY_LABEL "Energy/$\epsilon$"
-# Q1 "$Q_{1}$"
-# Q2 "$Q_{2}$"
+ENERGY_LABEL "Energy/$\epsilon$"
+Q1 "$Q_{1}$"
+Q2 "$Q_{2}$"
 # metric 123 PC_projections/PC_projections1
 metric3d PC_projections/PC_projections1 PC_projections/PC_projections2
-# tex
+tex
