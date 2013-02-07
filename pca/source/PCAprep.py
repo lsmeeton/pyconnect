@@ -104,11 +104,14 @@ class MyPCAprep(PCAinit):
         Converts config_space from a 2D [n_min][3*n_atoms] numpy array to a 
         3D [n_min][3][n_atoms] numpy array
         '''
-        self.config_space = self.config_space.flatten()
+#        self.config_space = self.config_space.flatten()
+#        self.config_space = self.config_space.reshape(self.n_min,
+#                                                      3,
+#                                                      self.kw.n_atoms)
         self.config_space = self.config_space.reshape(self.n_min,
-                                                      3,
-                                                      self.kw.n_atoms)
-#        self.config_space = self.config_space.swapaxes(1,2)
+                                                      self.kw.n_atoms,
+                                                      3)
+        self.config_space = self.config_space.swapaxes(1,2)
         
     def ReshapeDihedral(self):
         '''
@@ -218,7 +221,7 @@ class MyPCAprep(PCAinit):
             
             # Calculate a 1D [n_min] narray of the residue for each structure
             self.Residue()
-        
+            print sum(self.structure_residue), self.config_space.shape
             # In this loop, calculate and perform the rotation matrix for each 
             # structure in the ensemble relative to the ensemble mean
             for j in range(self.n_min): 
@@ -243,7 +246,8 @@ class MyPCAprep(PCAinit):
 
             print 'Norm of difference between ensemble averages after %i iterations: %3.8f'%(i+1, diff_ensemble_average)
         
-        self.config_space = self.config_space - self.ensemble_average
+#        self.config_space = self.config_space - self.ensemble_average
+        # What is the relevance of the above line?
 
     def CentreOfMass(self):
         '''

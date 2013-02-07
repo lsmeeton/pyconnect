@@ -18,7 +18,7 @@ if __name__ == '__main__':
     pca.ShapeCheck()
     pca.ReadMinimaIndex()
     pca.ReadConfigurationSpace()
-    print pca.kw.beta
+#    print pca.kw.beta
     if pca.kw.beta:
         pca.ReadMinimaEnergies()   
         pca.FindGM()
@@ -32,6 +32,9 @@ if __name__ == '__main__':
             pca.ReshapeCartesian1D3D()
 #        pca.config_space_copy = pca.config_space.copy()
         pca.LstSqrStructureFit()
+#        pca.LstSqrStructureFit()
+#        pca.LstSqrStructureFit()
+#        pca.LstSqrStructureFit()    
         pca.ReshapeCartesian3D2D()
 
     if pca.kw.basis == 'dihedral':
