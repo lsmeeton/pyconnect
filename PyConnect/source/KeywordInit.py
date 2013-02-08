@@ -75,6 +75,7 @@ class Keywords(dict):
             self['colour_bar_label'] = self.ColourBarLabelRead()
             self['tex'] = self.TexRead()
             self['maya'] = self.MayaRead()
+            self['histogram'] = self.HistogramRead()
 
             # Check minima file and TS file
             self.minima['data_file'] = self.FileCheck(
@@ -499,6 +500,23 @@ class Keywords(dict):
             return True
         else:
             return False
+        
+        
+    def HistogramRead(self):
+        '''
+        
+        '''
+        keyword = self.ReadDinfo('histogram')
+        if keyword:
+            try:
+                keyword[1] = int(keyword[1])
+            except:
+                print 'ERROR'
+
+            return dict(bins = keyword[1])
+        else:
+            return False
+        
         
 if __name__ == '__main__':
     #pr = prac()

@@ -218,6 +218,9 @@ class MDGCanvasFrame():
                                                  orientation='vertical')
             cb1.set_label(self.disc.kw['colour_bar_label']['label'])
         
+        if self.disc.kw.histogram:
+            self.PlotHist()
+        
     def FormatAxes(self):
         '''
         Format axes (ie. determine location and add labels)
@@ -240,7 +243,7 @@ class MDGCanvasFrame():
             self.ax.set_xlim(self.disc.basin_index['MinY'],
                              self.disc.basin_index['MaxY'])
             
-        self.ax.set_ylim(self.disc.kw.first['E1'] - (self.disc.kw.levels['n'])*self.disc.kw.delta['dE'],self.disc.kw.first['E1'])#(-48,-52)
+#        self.ax.set_ylim(self.disc.kw.first['E1'] - (self.disc.kw.levels['n'])*self.disc.kw.delta['dE'],self.disc.kw.first['E1'])#(-48,-52)
  
 
         if self.disc.kw['energy_label']['label']: 
@@ -289,6 +292,48 @@ class MDGCanvasFrame():
                                                 linewidth=0.2)
         self.line_array.append(np.array([[x1,z1],[x2,z2]]))
         self.rgba_array.append(rgb)
+        
+    def PlotHist(self):
+        '''
+        Plots a histogram
+        '''
+        from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+        
+        divider = make_axes_locatable(self.ax)
+        self.axHistx = divider.append_axes("top", 1.2, pad=0.0, sharex=self.ax)
+        
+        for loc, spine in self.axHistx.spines.iteritems():
+            if loc in ['right']:    
+                spine.set_position(('outward',10)) # outward by 10 points                                                                               
+            elif loc in ['left','bottom','top']:
+                spine.set_color('none') # don't draw spine                                                                                              
+            else:
+                raise ValueError('unknown spine location: %s'%loc)
+            
+
+        for tl in self.axHistx.get_xticklabels():
+            tl.set_visible(False)
+        self.axHistx.yaxis.set_ticks_position('right')
+        
+        if self.Q == 'X':
+            self.axHistx.set_xlim(self.disc.basin_index['MinX'],
+                             self.disc.basin_index['MaxX'])
+        else:
+            self.axHistx.set_xlim(self.disc.basin_index['MinY'],
+                             self.disc.basin_index['MaxY'])
+        
+        bins = self.disc.kw.histogram['bins']
+        
+        for col in self.disc.trmin_dict:
+            
+            metric_array = []
+            for m in self.disc.minima_index['Index']:
+                if self.disc.minima_index['Index'][m]['Colour']['RGB'] == col:
+                    order_parm = self.disc.minima_index['Index'][m]['Metric'][self.Q.lower()]  
+                    metric_array.append(order_parm)
+
+            plt.hist(metric_array, bins, color=col,alpha=0.5)#, range, normed, weights, cumulative, bottom, histtype, align, orientation, rwidth, log, color, label, hold)
 
 class MDG3DMayaCanvasFrame():
     def __init__(self,disc):
