@@ -1,0 +1,4 @@
+format_file path.pdb
+pc_file extractedmin
+projection_file /home/lewis/git/PCArepo/pca/example/PC_coords/PC_coords1
+n_atoms 46
