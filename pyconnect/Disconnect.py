@@ -118,17 +118,17 @@ class Disconnect():
 
         self.basin_index = {'Level': {},
                             'MaxX':
-                                -1.0,
+                                float('-inf'),
                             'MaxY':
-                                -1.0,
+                                float('-inf'),
                             'MinX':
-                                2.0,
+                                float('inf'),
                             'MinY':
-                                2.0,
+                                float('inf'),
                             'MaxTrval':
-                                -1.0,
+                                float('-inf'),
                             'MinTrval':
-                                1.0}
+                                float('inf')}
         diff = 1.0/(self.kw.levels['n'] - 1)
         for l in range(1, self.kw.levels['n'] + 1):
             
