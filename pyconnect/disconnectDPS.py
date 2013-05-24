@@ -7,8 +7,8 @@ from KeywordInit import Keywords
 from DisconnectPlot import DisconnectPlot
 import wx
 #import ProxyGUI as GUI
-from MatplotlibGUI import DGCanvasFrame, MDGCanvasFrame,MDG3DCanvasFrame, MDG3DMayaCanvasFrame
-from mayavi import mlab
+from MatplotlibGUI import DGCanvasFrame, MDGCanvasFrame,MDG3DCanvasFrame#, MDG3DMayaCanvasFrame
+# from mayavi import mlab
 
 if __name__ == '__main__':
     
@@ -73,13 +73,13 @@ if __name__ == '__main__':
         
 #        plt.draw()
 #        plt.show()
-        if kw.maya:
-            plt.show()
-            MDG3Dframe = MDG3DMayaCanvasFrame(disc)
-            mlab.show()
-        else:
-            MDG3Dframe = MDG3DCanvasFrame(disc)
-            plt.show()
+#         if kw.maya:
+#             plt.show()
+#             MDG3Dframe = MDG3DMayaCanvasFrame(disc)
+#             mlab.show()
+#         else:
+        MDG3Dframe = MDG3DCanvasFrame(disc)
+        plt.show()
 
     elif disc.kw.metric['present']:
         DGframe = DGCanvasFrame(disc)

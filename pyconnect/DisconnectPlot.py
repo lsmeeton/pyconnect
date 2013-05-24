@@ -316,12 +316,12 @@ class DisconnectPlot(Disconnect):
                 if x < self.basin_index['MinX']:
                     self.basin_index['MinX'] = x
                     
-            except KeyError:
+            except KeyError: continue
 #                print self.kw.metric3d['metricx_file'] 
-                print('Minimum %d in file "%s" but not in file "%s"'
-                      %(m,
-                        self.kw.metric3d['metricx_file'],
-                        self.kw.minima['data_file']))
+#                 print('Minimum %d in file "%s" but not in file "%s"'
+#                       %(m,
+#                         self.kw.metric3d['metricx_file'],
+#                         self.kw.minima['data_file']))
 #                print self.minima_index['Index'][m ]
 #                 sys.exit()
 
@@ -356,12 +356,12 @@ class DisconnectPlot(Disconnect):
                     self.basin_index['MaxY'] = y
                 if y < self.basin_index['MinY']:
                     self.basin_index['MinY'] = y
-            except KeyError:
+            except KeyError: continue
 #                 print self.kw.metric['metric_file'] 
-                print('Minimum %d in file "%s" but not in file "%s"'
-                      %(m,
-                        self.kw.metric3d['metricy_file'],
-                        self.kw.minima['data_file']))
+#                 print('Minimum %d in file "%s" but not in file "%s"'
+#                       %(m,
+#                         self.kw.metric3d['metricy_file'],
+#                         self.kw.minima['data_file']))
 #                print self.minima_index['Index'][m ]
 #                 sys.exit()
                 
