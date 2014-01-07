@@ -4,10 +4,10 @@ Written by Lewis Smeeton, 2012
 import numpy as np
 import matplotlib.colors as colors
 import matplotlib.cm as cm
-import os
-#from ProxyDisconnect import Disconnect
-from Disconnect import Disconnect
 import sys
+
+from Disconnect import Disconnect
+
 
 #--------------------------------------------------------------------#
 __metaclass__ = type

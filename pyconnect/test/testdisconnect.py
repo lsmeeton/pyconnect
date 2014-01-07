@@ -1,18 +1,17 @@
-#!/usr/bin/env python
-
 import unittest
-import sys
-sys.path.append('/home/lewis/git/pyconnect/PyConnect/source/')
+# import sys
+# sys.path.append('/home/lewis/PyConnect/pyconnect/source/')
 #import mymodule
 
-from Disconnect import Disconnect
+# from Disconnect import Disconnect
 from DisconnectPlot import DisconnectPlot
 from KeywordInit import Keywords
 
 
-class ProductTestCase(unittest.TestCase):
+class TestDisconnect(unittest.TestCase):
 
     def setUp(self):
+        print 'hello'
         kw = Keywords()
         self.disc = DisconnectPlot(kw)
         self.disc.InitialiseMin()
@@ -613,28 +612,11 @@ class ProductTestCase(unittest.TestCase):
                     c = self.disc.basin_index['Level'][l]['Basin'][b]['Children']
                     if c:
                         pmin_list[l][b] = c
-        # Re-number test list to correspond to minima_list
-        
-        #print self.disc.basin_index['Level']
-        #print self.disc.basin_index['Level'][2]['Basin'][13]
-        #print 'python'
-        #print minima_list[2]
-        #print 'FORTRAN'
-        #print test_list[2]
-        #
-        #print 'python'
-        #print minima_list[3]
-        #print 'FORTRAN'
-        #print test_list[3]
-        #print self.disc.basin_index['Level'][8]['Basin']
-#        print children_list
-#        print pmin_list
-        
-        #print parent_list
-        #print pmin_list
+
         self.assertDictEqual(pmin_list, children_list)
 
 
     
-if __name__ == '__main__': unittest.main()
+# if __name__ == '__main__': 
+#     unittest.main()
 
