@@ -1,12 +1,6 @@
-#!/usr/bin/env python
-
-import numpy as np
 import matplotlib.pyplot as plt
 from KeywordInit import Keywords
-#from Disconnect import Disconnect
 from DisconnectPlot import DisconnectPlot
-import wx
-#import ProxyGUI as GUI
 from MatplotlibGUI import DGCanvasFrame, MDGCanvasFrame,MDG3DCanvasFrame#, MDG3DMayaCanvasFrame
 # from mayavi import mlab
 
@@ -16,7 +10,7 @@ if __name__ == '__main__':
     print '--------------- ------\n'
     print 'Reading keyword file\n'
     
-    kw = Keywords(dinfo="/home/lewis/DISCONNECTIO/DISCONNECTinput/BLN69/dinfo")
+    kw = Keywords(dinfo="/home/lewis/DISCONNECTIO/DISCONNECTinput/BLN46/dinfo")
 
     disc = DisconnectPlot(kw)
     
@@ -43,10 +37,6 @@ if __name__ == '__main__':
     print 'Initialising Basins'
     disc.InitialiseBasin()
     disc.AssignBasins()
-#    for l in disc.basin_index['Level']:
-#        print '%d basins at energy %2.2f'%(disc.basin_index['Level'][l]['No. of Basins'],
-#                                           disc.basin_index['Level'][l]['Energy'])
-
     disc.PruneBasins()
 
     disc.ReNumberBasins()
@@ -60,10 +50,12 @@ if __name__ == '__main__':
         print '%d basins at energy %2.2f'%(disc.basin_index['Level'][l]['No. of Basins'],
                                            disc.basin_index['Level'][l]['Energy'])
     print '\n'
+    
     # End initialisation
+    
     print 'Positioning Basins'
     disc.PositionBasins()
-    #disc.GetMetric3D()
+
     if disc.kw.metric3d['present']:
         
         DGframe = DGCanvasFrame(disc)
@@ -87,10 +79,5 @@ if __name__ == '__main__':
        
     else:
         DGframe = DGCanvasFrame(disc)
-#        plt.savefig("tree.pdf",format="pdf")
         
         plt.show()
-
-#    GUI.MainWin(disc)
-    
-#    MainLoop()
