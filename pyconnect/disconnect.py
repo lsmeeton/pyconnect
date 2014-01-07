@@ -2,16 +2,12 @@
 Written By LEWIS SMEETON, 2012
 '''
 
-import numpy as np
-import string
-import os
 import sys
-#from KeywordDict import Keywords
-#from KeywordInit import Keywords
+
 #--------------------------------------------------------------------#
 __metaclass__ = type
 
-class Disconnect():
+class Disconnect(object):
     '''
     Disconnect is the superclass of DisconnectPlot. It contains 
     methods to find and read input file 'dinfo', and to read data

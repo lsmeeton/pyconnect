@@ -6,7 +6,7 @@ import matplotlib.colors as colors
 import matplotlib.cm as cm
 import sys
 
-from Disconnect import Disconnect
+from pyconnect.disconnect import Disconnect
 
 
 #--------------------------------------------------------------------#

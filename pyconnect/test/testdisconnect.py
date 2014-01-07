@@ -4,8 +4,8 @@ import unittest
 #import mymodule
 
 # from Disconnect import Disconnect
-from DisconnectPlot import DisconnectPlot
-from KeywordInit import Keywords
+from pyconnect.disconnectplot import DisconnectPlot
+from pyconnect.keyword import Keywords
 
 
 class TestDisconnect(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestDisconnect(unittest.TestCase):
         self.disc.InitialiseTS()
     
     def testCountMin1(self):
-        n = 132356
+        n = 4447
         self.disc.CountMin()
         self.assertEqual(self.disc.minima_index['Size'], n)
 
@@ -37,7 +37,7 @@ class TestDisconnect(unittest.TestCase):
         self.assertDictEqual(minima_list, test_list)
 
     def testCountTS1(self):
-        n = 117791
+        n = 3526
 
         self.disc.CountTS()
         self.assertEqual(self.disc.ts_index['Size'], n)
