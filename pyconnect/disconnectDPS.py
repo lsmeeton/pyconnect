@@ -16,7 +16,7 @@ if __name__ == '__main__':
     print '--------------- ------\n'
     print 'Reading keyword file\n'
     
-    kw = Keywords()
+    kw = Keywords(dinfo="/home/lewis/DISCONNECTIO/DISCONNECTinput/BLN69/dinfo")
 
     disc = DisconnectPlot(kw)
     
@@ -64,7 +64,6 @@ if __name__ == '__main__':
     print 'Positioning Basins'
     disc.PositionBasins()
     #disc.GetMetric3D()
-
     if disc.kw.metric3d['present']:
         
         DGframe = DGCanvasFrame(disc)
@@ -87,7 +86,6 @@ if __name__ == '__main__':
         plt.show()
        
     else:
-        
         DGframe = DGCanvasFrame(disc)
 #        plt.savefig("tree.pdf",format="pdf")
         

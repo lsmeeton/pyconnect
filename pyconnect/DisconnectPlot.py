@@ -30,12 +30,12 @@ class DisconnectPlot(Disconnect):
         from file or calculate.
         '''
         pres = self.kw.metric3d['present']
-        if self.kw.metric3d['present']:#self.kw.metric3D['present']: 
+        if self.kw.metric3d['present']:
             self.GetMetric3DNewStyle()
-#            self.GetMetric3D()
+
         elif self.kw.metric['present']: 
             self.GetMetric2DNewStyle()
-#            self.GetMetric2D()
+
         print self.kw.trval
         if self.kw.trmin['trmin_file']: self.GetTrminColours()
         elif self.kw.trval['trval_file']: self.GetTrvalColoursNewStyle()
@@ -49,11 +49,7 @@ class DisconnectPlot(Disconnect):
         display media (ie. ps/eps/openGL etc)
         '''
         self.AssignLineHeight()
-#        if self.kw.metric3d['present']:#self.kw.metric3D['present']: 
-#            self.OpenGLCoordsMetric3D()
-#        elif self.kw.metric['present']: 
-#            self.OpenGLCoordsMetric2D()
-#        self.OpenGLCoordsMetric3D()
+
 
     def OpenGLCoordsMetric2D(self):
         '''
@@ -69,7 +65,7 @@ class DisconnectPlot(Disconnect):
         minX = np.floor(minX/(10**r_exponent))*(10**r_exponent)
         maxX = np.ceil(maxX/(10**r_exponent))*(10**r_exponent)
         r = maxX - minX
-#        print 'r', r, maxX, minX
+
         self.basin_index['MetXTickNo'] = int(r/(10**r_exponent))
         self.basin_index['MinX'] = minX
         self.basin_index['MaxX'] = maxX
@@ -317,13 +313,6 @@ class DisconnectPlot(Disconnect):
                     self.basin_index['MinX'] = x
                     
             except KeyError: continue
-#                print self.kw.metric3d['metricx_file'] 
-#                 print('Minimum %d in file "%s" but not in file "%s"'
-#                       %(m,
-#                         self.kw.metric3d['metricx_file'],
-#                         self.kw.minima['data_file']))
-#                print self.minima_index['Index'][m ]
-#                 sys.exit()
 
             
         for l in self.basin_index['Level']:
@@ -357,13 +346,6 @@ class DisconnectPlot(Disconnect):
                 if y < self.basin_index['MinY']:
                     self.basin_index['MinY'] = y
             except KeyError: continue
-#                 print self.kw.metric['metric_file'] 
-#                 print('Minimum %d in file "%s" but not in file "%s"'
-#                       %(m,
-#                         self.kw.metric3d['metricy_file'],
-#                         self.kw.minima['data_file']))
-#                print self.minima_index['Index'][m ]
-#                 sys.exit()
                 
 
         for l in self.basin_index['Level']:
@@ -391,11 +373,6 @@ class DisconnectPlot(Disconnect):
                        4:(0.5019607843137255, 0.0, 0.5019607843137255), #purple
                        5:(1.0, 0.6470588235294118, 0.0), #orange
                        6:(0.0, 0.0, 0.5019607843137255)} #navy
-#        i=1
-#        for colour in color.cnames:
-#            colour_rgb = color.colorConverter.to_rgb(colour)
-#            colour_dict[i] = colour_rgb
-#            i += 1
         
         col = 1
         for f in self.kw.trmin['trmin_file']:
@@ -478,18 +455,16 @@ class DisconnectPlot(Disconnect):
         Reads Trval values from "New Style" order parameter files
         '''
         self.col_map = cm.get_cmap('brg_r')
-        
-#        i = 0
 
         for lines in open(self.kw.trval['trval_file']):
-#            i += 1
+
             lines = lines.split()
             if lines[0] == '#' or len(lines) == 0: continue
             i = int(lines[0])
-#            print lines
+
             if (self.minima_index['Index'].has_key(i)):
                 col = float(lines[1])
-#                print i, col
+
                 self.minima_index['Index'][i]['Metric']['trval'] = col
                 if col == None: sys.exit('None! %d'%i)
                 # Find max and min values of x for scaling
@@ -511,7 +486,7 @@ class DisconnectPlot(Disconnect):
                     ['Min']:
                     temp.append(self.minima_index['Index'][m]
                                 ['Metric']['trval'])
-#                print temp
+
                 self.basin_index['Level'][l]['Basin'][b]\
                     ['Trval'] = np.mean(temp)
                     
@@ -569,8 +544,6 @@ class DisconnectPlot(Disconnect):
         sgn = True
         # Sort basins into ascending size order
         size_order = self.OrderByBasinSize(l,c)
-       
-#        size_order = self.Mix(size_order)
         
         for i in size_order:
             if sgn:
@@ -649,9 +622,7 @@ class DisconnectPlot(Disconnect):
             
                     self.basin_index['Level'][l]['Basin'][b]['X']\
                         = ratio*(x_temp - p_x) + p_x
-        
-
-
+    
 
     def OrderByBasinSize(self,l,c):
         '''
@@ -669,33 +640,6 @@ class DisconnectPlot(Disconnect):
         temp_order = sorted(temp_order_dict, key=temp_order_dict.
                             get)
         return temp_order
-
-#    def Mix(self, mixlist):
-#        '''
-#        Mixes up the size order
-#        '''
-#        n = len(mixlist)
-#        copylist = []#mixlist
-#        pos = 1
-#        sgn = True
-#        delta = n - 1
-##        print 'mix', mixlist
-#        while True:
-#            
-#            if sgn:
-#                x = mixlist.pop(0)
-#                copylist.append(x)
-#                if len(mixlist) == 0: break
-#                sgn = False
-#            #    print 'T', x
-#            if not sgn:
-#                x = mixlist.pop()
-#                copylist.append(x)
-#                sgn = True
-#            #    print 'F', x
-#                if len(mixlist) == 0: break
-##        print 'COPY', copylist
-#        return copylist
     
 #==============================================================================    
 #===========================Interactive Functions============================== 

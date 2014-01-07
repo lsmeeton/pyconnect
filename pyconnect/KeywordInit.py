@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import os
 import sys
 
@@ -17,14 +15,14 @@ class Keywords(dict):
     __getattr__ = dict.__getitem__
     __setattr__ = dict.__setitem__
 
-    def __init__(self, *args):
+    def __init__(self, dinfo="dinfo",*args):
         super(Keywords, self).__init__(*args)
 
            
 
         # The draw option determines if the the disconnectivity 
         # graph is ready to be drawn
-        self.dinfo = 'dinfo'
+        self.dinfo = dinfo
         print 'Reading keyword data from file "%s"'%self.dinfo
         self.draw = False
 
@@ -159,7 +157,7 @@ class Keywords(dict):
         
         keyword = self.ReadDinfo('interactive')
         
-        if keyword: #self.interactive = True
+        if keyword: 
             return True
 
     def DeltaRead(self):
@@ -291,8 +289,6 @@ class Keywords(dict):
                    sys.exit('dsfasdfadsfa!!!!')
         
         return dict(Min = idmin_dict)
-#        else:
-#            return
 
 
     def MetricRead(self):
@@ -300,7 +296,6 @@ class Keywords(dict):
 
         '''
         keyword = self.ReadDinfo('metric')
-#        print 'keyword',keyword
         if keyword:
             try:
                 keyword[2] = str(keyword[2])
@@ -316,7 +311,6 @@ class Keywords(dict):
 
         '''
         keyword = self.ReadDinfo('metric3d')
-#        print 'keyword',keyword
         if keyword:
             try:
                 keyword[1] = str(keyword[1])
@@ -386,18 +380,13 @@ class Keywords(dict):
         keyword = self.ReadDinfo('trmin')
         if keyword:
             file_range = len(keyword)
-#            print 'file range', file_range
             temp_list = []
             for i in range(3, file_range):
-#                print 'TrminRead',i
-                #try:
+
                 temp_list.append(str(keyword[i]))
-#                print temp_list, keyword
-                #else:
-                #    keyword[i] = None
-                
+
             return {'trmin_file': temp_list}
-        #else:
+
         return dict(trmin_file = None)
     
     def TrvalRead(self):
@@ -419,10 +408,7 @@ class Keywords(dict):
                 keyword[2] = str(keyword[2])
             except:
                 print 'ERROR'
-#            return dict(present = True,
-#                        trval_file = keyword[2])
-#
-#        else: return dict(present = False)
+
             return dict(trval_file = keyword[2])
 
         else: 
@@ -435,9 +421,7 @@ class Keywords(dict):
         keyword = self.ReadDinfo('energy_label')
         if keyword:
             e_l = keyword[1]#''
-#            for s in keyword[1:]:
-#                e_l += str(s) + ' '
-            #print e_l
+
             return {'label': e_l}
         else: return {'label': None}
         
@@ -448,8 +432,7 @@ class Keywords(dict):
         keyword = self.ReadDinfo('q1')
         if keyword:
             q1 = keyword[1]
-#            for s in keyword[1:]:
-#                q1 += str(s)
+
             return {'label': q1}
         else: 
             return {'label': None}
@@ -461,8 +444,7 @@ class Keywords(dict):
         keyword = self.ReadDinfo('q2')
         if keyword:
             q2 = keyword[1]
-#            for s in keyword[1:]:
-#                q2 += str(s)
+
             return {'label': q2}
         else:
              return {'label': None}
@@ -474,8 +456,7 @@ class Keywords(dict):
         keyword = self.ReadDinfo('colour_bar_label')
         if keyword:
             label = keyword[1]
-#            for s in keyword[1:]:
-#                q2 += str(s)
+
             return {'label': label}
         else:
              return {'label': None}
@@ -519,18 +500,6 @@ class Keywords(dict):
         
         
 if __name__ == '__main__':
-    #pr = prac()
+
     kw = Keywords()
-    #print kw.delta
-#    print kw
-#    print kw['delta']
-#    if not kw['metric'][0]: print 'letter'
-#    else: print 'LLeter', kw.metric
 
-
-#    print callable(kw.DeltaRead)
-    #print pr['delta']
-    #print hasattr(pr, 'delta')
-    #print pr
-    #print pr.hi
-    #print pr.hello()

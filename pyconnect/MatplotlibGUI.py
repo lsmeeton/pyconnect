@@ -1,33 +1,18 @@
-#!/usr/bin/env python
-
-#import wx
-#import sys
 import os
 import matplotlib
-#matplotlib.use('WXAgg')
-#from matplotlib.figure import Figure
-#from matplotlib.backends.backend_wxagg import \
-#    FigureCanvasWxAgg as FigCanvas, \
-#    NavigationToolbar2WxAgg as NavigationToolbar
 from matplotlib import rc
-#from matplotlib import colors, cm
 from matplotlib.collections import LineCollection
-#from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 import matplotlib.pylab as plt
-#import matplotlib.lines as lns
 from mpl_toolkits.mplot3d import Axes3D
 from KeywordInit import Keywords
 from DisconnectPlot import DisconnectPlot
-#import time
 import sys
 # from mayavi import mlab
 
 
 class DGCanvasFrame():
     def __init__(self,disc):
-        
-#        super(DGCanvasFrame,self).__init__()
         
         self.disc = disc
    
@@ -36,14 +21,11 @@ class DGCanvasFrame():
     def init_plot(self):
         
         # self.line_array is input for linecollection object
-        self.line_array = []#np.zeros((2,2))
+        self.line_array = []
         self.rgba_array = []
         self.fig = plt.figure()
 
         self.ax = self.fig.add_subplot(111)
-#        self.colbar = self.fig.add_subplot(122)
-        
-#        self.ax.set_title('Disconnectivity Graph')
 
         self.FormatAxes()
         
@@ -150,7 +132,7 @@ class DGCanvasFrame():
                     ['Parents']
                 self.LinesDG(l,b,c,p)
         print 'shape of self.line_array', np.shape(self.line_array), type(self.line_array[0])
-#        np.swapaxes(self.line_array, 0, 2)
+
         self.Line = LineCollection(self.line_array,
                                    color=self.rgba_array,
                                    linewidth=0.5)
@@ -158,7 +140,7 @@ class DGCanvasFrame():
 
     def LinesDG(self,l,b,c,p):
         rgb = self.disc.basin_index['Level'][l]['Basin'][b]['RGB']
-#        colour = self.disc.basin_index['Level'][l]['Basin'][b]['X']
+
 
         x1 = self.disc.basin_index['Level'][l-1]['Basin'][p]['X']
 
@@ -171,13 +153,10 @@ class DGCanvasFrame():
             except KeyError: 
                 print l,b
                 sys.exit()
-#            z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
         else:
 
             z2 = self.disc.basin_index['Level'][l]['Energy']      
-#        self.plot_dataDG = self.ax.plot([x1,x2],[z1,z2], c=rgb, linewidth=0.5)
-#        self.line_array = np.dstack((self.line_array,np.array([[x1,z1],
-#                                                               [x2,z2]])))
+
         self.line_array.append(np.array([[x1,z1],[x2,z2]]))
         self.rgba_array.append(rgb)
     
@@ -196,18 +175,14 @@ class MDGCanvasFrame():
         self.rgba_array = []
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111)
-        
-#        self.ax.set_title('Metric Disconnectivity Graph')
+
         
         # Turns off axes and ticks for in the top and right hand portions
         # of the plot, and sets the bottom and left hand axis back from the
         # plot.
         
         self.FormatAxes()
-        
 
-
-#        self.PlotDG()
         self.PlotMDG()
         
         if self.disc.kw.trval['trval_file']:
@@ -269,8 +244,6 @@ class MDGCanvasFrame():
         else:
             self.ax.set_xlim(self.disc.basin_index['MinY'],
                              self.disc.basin_index['MaxY'])
-            
-#        self.ax.set_ylim(self.disc.kw.first['E1'] - (self.disc.kw.levels['n'])*self.disc.kw.delta['dE'],self.disc.kw.first['E1'])#(-48,-52)
  
 
         if self.disc.kw['energy_label']['label']: 
@@ -314,7 +287,7 @@ class MDGCanvasFrame():
             z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
 
         else:
-            z2 = self.disc.basin_index['Level'][l]['Energy']#+0.5          
+            z2 = self.disc.basin_index['Level'][l]['Energy']          
         self.plot_dataMDG = self.ax.plot([x1,x2],[z1,z2], color =rgb,
                                                 linewidth=0.5)
         self.line_array.append(np.array([[x1,z1],[x2,z2]]))
