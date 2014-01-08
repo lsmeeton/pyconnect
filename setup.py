@@ -6,7 +6,7 @@ setup(
     author='Lewis Smeeton',
     author_email='lcs137@bham.ac.uk',
     packages=['pyconnect', 'pyconnect.test'],
-    scripts=['pyconnect/disconnectDPS.py'],#,'bin/wash-towels.py'],
+    scripts=['pyconnect/rundisconnect.py'],#,'bin/wash-towels.py'],
     #url='http://pypi.python.org/pypi/Pyconnect/',
     #license='LICENSE.txt',
     #description='Useful towel-related stuff.',

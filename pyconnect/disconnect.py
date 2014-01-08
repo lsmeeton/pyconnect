@@ -2,16 +2,12 @@
 Written By LEWIS SMEETON, 2012
 '''
 
-import numpy as np
-import string
-import os
 import sys
-#from KeywordDict import Keywords
-#from KeywordInit import Keywords
+
 #--------------------------------------------------------------------#
 __metaclass__ = type
 
-class Disconnect():
+class Disconnect(object):
     '''
     Disconnect is the superclass of DisconnectPlot. It contains 
     methods to find and read input file 'dinfo', and to read data
@@ -23,21 +19,6 @@ class Disconnect():
         # Bind Keywords
         self.kw = keyword
 
-        # Initialising minima_index and ts_index
-        # Not necesary for python, but helpful to know what to expect
-        # to arrive in a data structure
-
-        #self.InitialiseMin()
-        #self.InitialiseTS()
-        
-        #self.CountMin()
-        #self.CountTS()
-        #self.RemoveThreshold()
-        #self.RemoveUnderConnect()
-        #self.RemoveDisjoint()
-
-
-        #self.InitialiseBasin()
         
     def init(self):
         '''
@@ -75,9 +56,7 @@ class Disconnect():
             self.minima_index['Index'][indice]['Degree'] = 0
             self.minima_index['Index'][indice]['Colour'] = \
                 {'RGB':(0.0,0.0,0.0)}
-#{'r': 0.0,
-# 'g': 0.0,
-                # 'b': 0.0}
+
             self.minima_index['Index'][indice]['Metric'] = \
                 {'x': None,
                  'y': None,
@@ -92,9 +71,7 @@ class Disconnect():
                     ['Level'][i] = None
                 
         self.FindGM()
-        
-#        if self.kw.idmin['Min']:
-#            self.IdentifyMin()
+
         
         if not self.kw.connectmin:
             self.kw.connectmin = self.minima_index['GM']
@@ -141,19 +118,6 @@ class Disconnect():
                                             'GLZ':
                                                 (1-l)*diff + 0.5}
             
-        
-    
-        #self.AssignBasins()
-
-        #self.PruneBasins()
-        #
-        #self.ReNumberBasins()
-        #
-        #self.GetParentsAndChildren()
-        #
-        #self.GetNodeSize()
-        
-
     def ReadMinima(self, file_name):
         '''
         Reads minima index and energy from 'file_name'. Ignores minima which 
@@ -393,7 +357,7 @@ class Disconnect():
                 if l == 1: continue
                 b = self.minima_index['Index'][m]['Basin']['Level'][l]
                 if b:
-                    #if l - 1 != 0:
+ 
                     
                     p = self.minima_index['Index'][m]['Basin']\
                         ['Level'][l-1]
@@ -439,18 +403,6 @@ class Disconnect():
                     self.basin_index['Level'][l]['Basin'][b]\
                         ['Parents'] = p
 
-                    #if l + 1 <= self.kw.levels['n']:
-                    #    c = self.minima_index['Index'][m]['Basin']\
-                    #        ['Level'][l+1]
-                    #    if c:
-                    #        self.basin_index['Level'][l]['Basin'][b]\
-                    #            ['Children'].append(c)
-                    #    else:
-                    #        self.basin_index['Level'][l]['Basin'][b]\
-                    #            ['Children'] = None
-                    #else:
-                    #    self.basin_index['Level'][l]['Basin'][b]\
-                    #        ['Children'] = None
 
         for l in self.basin_index['Level']:
             if l == self.kw.levels['n']: continue
@@ -466,12 +418,6 @@ class Disconnect():
                         ['Children'] = \
                         list(set(self.basin_index['Level'][l]\
                                      ['Basin'][b]['Children']))
-        # Set all children in bottom level to None
-        #l = self.kw.levels['n']
-        #for b in self.basin_index['Level'][l]['Basin']:
-        #    self.basin_index['Level'][l]['Basin'][b]\
-        #        ['Children'] = None
-
 
     def GetNodeSize(self):
         '''
@@ -538,14 +484,6 @@ class Disconnect():
         self.ts_index['LowTS'] = self.ts_index['Index'][TS]
         self.ts_index['LowTS']['Index'] = TS
 
-            
-            
-#    def IdentifyMin(self):
-#        '''
-#        Assigns min which need to be identified from IDMIN keyword
-#        '''
-#        self.minima_index['Identify'] = self.kw.idmin['Min']
-        
 #--------------------------------------------------------------------#
 
     def RemoveThreshold(self):
