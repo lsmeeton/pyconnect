@@ -152,7 +152,7 @@ class DGCanvasFrame():
         if not c:
             try: z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
             except KeyError: 
-                print l,b
+                print "Basin %d at level %d appears to have no children, and yet has not been assigned an Energy"%(b,l)
                 sys.exit()
         else:
 

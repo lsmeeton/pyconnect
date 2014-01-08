@@ -12,7 +12,7 @@ if __name__ == '__main__':
     print '--------------- ------\n'
     print 'Reading keyword file\n'
     
-    kw = Keywords(dinfo="/home/lewis/DISCONNECTIO/DISCONNECTinput/BLN46/dinfo")
+    kw = Keywords(dinfo="/home/lewis/DISCONNECTIO/DISCONNECTinput/BLN69/dinfo")
 
     disc = DisconnectPlot(kw)
     
@@ -25,6 +25,7 @@ if __name__ == '__main__':
     disc.CountTS()
     print '%d Minima read,\t%d TS read\n'%(disc.minima_index['Size'],disc.ts_index['Size'])
 
+    disc.RemoveInvalidTS()
     print 'Removing minima with less than %d connections'%disc.kw.connectmin['connectmin']
     disc.RemoveUnderConnect()
     disc.CountMin()

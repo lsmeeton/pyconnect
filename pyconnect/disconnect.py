@@ -482,7 +482,44 @@ class Disconnect(object):
         for i in index:
             del self.ts_index['Index'][i]
 
+    def RemoveInvalidTS(self):
+        '''
+        Removes Transition states which have a lower energy than either
+        of the two minima they connect
+        '''
+        dm = []
+        dt = []
+        
+        for t in self.ts_index['Index']:
 
+            et = self.ts_index['Index'][t]['Energy']
+            
+            m1 = self.ts_index['Index'][t]['Min1']
+            m2 = self.ts_index['Index'][t]['Min2']
+
+            em1 = self.minima_index['Index'][m1]['Energy']
+            em2 = self.minima_index['Index'][m2]['Energy']
+            
+            if et < em1:
+                dt.append(t)
+                dm.append(m1)
+                
+            if et < em2:
+                dt.append(t)
+                dm.append(m2)
+                
+        if dm or dt:
+            dm = list(set(dm)) # Remove duplicates
+            dt = list(set(dt))
+            
+            for t in dt: 
+                del self.ts_index['Index'][t]
+                
+            for m in dm:
+                del self.minima_index['Index'][m]
+                
+            print "%d Transition states and %d minima were invalid and had to be removed"%(len(dt), len(dm))
+            
     def RemoveUnderConnect(self):
         '''
         Calculates the degree of each minima, and removes those which 
