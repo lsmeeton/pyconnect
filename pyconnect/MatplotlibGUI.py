@@ -168,8 +168,8 @@ class DGCanvasFrame():
 
         if not c:
             try: z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
-            except KeyError: 
-                print l,b
+            except KeyError as k: 
+                print l,b,k
                 sys.exit()
 #            z2 = self.disc.basin_index['Level'][l]['Basin'][b]['Energy']
         else:

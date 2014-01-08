@@ -17,14 +17,14 @@ class Keywords(dict):
     __getattr__ = dict.__getitem__
     __setattr__ = dict.__setitem__
 
-    def __init__(self, *args):
+    def __init__(self, dinfo = 'dinfo',*args):
         super(Keywords, self).__init__(*args)
 
            
 
         # The draw option determines if the the disconnectivity 
         # graph is ready to be drawn
-        self.dinfo = 'dinfo'
+        self.dinfo = dinfo
         print 'Reading keyword data from file "%s"'%self.dinfo
         self.draw = False
 
