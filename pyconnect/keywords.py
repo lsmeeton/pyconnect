@@ -286,7 +286,7 @@ class Keywords(dict):
                 try:
                     idmin_dict[int(i)] = int(i)
                 except IndexError:
-                   sys.exit('dsfasdfadsfa!!!!')
+                    sys.exit('dsfasdfadsfa!!!!')
         
         return dict(Min = idmin_dict)
 
@@ -447,7 +447,7 @@ class Keywords(dict):
 
             return {'label': q2}
         else:
-             return {'label': None}
+            return {'label': None}
          
     def ColourBarLabelRead(self):
         '''
@@ -459,7 +459,7 @@ class Keywords(dict):
 
             return {'label': label}
         else:
-             return {'label': None}
+            return {'label': None}
          
          
     def TexRead(self):

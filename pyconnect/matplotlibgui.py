@@ -1,13 +1,14 @@
-import os
 import matplotlib
 from matplotlib import rc
 from matplotlib.collections import LineCollection
 import numpy as np
 import matplotlib.pylab as plt
 from mpl_toolkits.mplot3d import Axes3D
-from KeywordInit import Keywords
-from DisconnectPlot import DisconnectPlot
 import sys
+
+from pyconnect.keywords import Keywords
+from pyconnect.disconnectplot import DisconnectPlot
+
 # from mayavi import mlab
 
 

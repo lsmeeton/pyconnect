@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
-from KeywordInit import Keywords
-from DisconnectPlot import DisconnectPlot
-from MatplotlibGUI import DGCanvasFrame, MDGCanvasFrame,MDG3DCanvasFrame#, MDG3DMayaCanvasFrame
+
+from pyconnect.keywords import Keywords
+from pyconnect.disconnectplot import DisconnectPlot
+from pyconnect.matplotlibgui import DGCanvasFrame, MDGCanvasFrame,MDG3DCanvasFrame
+
 # from mayavi import mlab
 
 if __name__ == '__main__':
