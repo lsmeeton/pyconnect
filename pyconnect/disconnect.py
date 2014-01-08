@@ -14,10 +14,10 @@ class Disconnect(object):
     from minima and TS database files.
     '''
     
-    def __init__(self, keyword):
+    def __init__(self, keywords):
         
         # Bind Keywords
-        self.kw = keyword
+        self.kw = keywords
 
         
     def init(self):
@@ -36,7 +36,7 @@ class Disconnect(object):
         self.AssignBasins()
         self.PruneBasins()
         self.ReNumberBasins()
-        self.GgetParentsAndChildren()
+        self.GetParentsAndChildren()
         self.GetNodeSize()
 #--------------------------------------------------------------------#
          
@@ -357,47 +357,7 @@ class Disconnect(object):
                 if l == 1: continue
                 b = self.minima_index['Index'][m]['Basin']['Level'][l]
                 if b:
- 
-                    
-                    p = self.minima_index['Index'][m]['Basin']\
-                        ['Level'][l-1]
-                    self.basin_index['Level'][l]['Basin'][b]\
-                        ['Parents'] = p
 
-                    if l + 1 <= self.kw.levels['n']:
-                        c = self.minima_index['Index'][m]['Basin']\
-                            ['Level'][l+1]
-                        if c:
-                            self.basin_index['Level'][l]['Basin'][b]\
-                                ['Children'].append(c)
-                        else:
-                            self.basin_index['Level'][l]['Basin'][b]\
-                                ['Children'] = None
-                    else:
-                        self.basin_index['Level'][l]['Basin'][b]\
-                            ['Children'] = None
-
-        for l in self.basin_index['Level']:
-            for b in self.basin_index['Level'][l]['Basin']:
-                if (self.basin_index['Level'][l]
-                    ['Basin'][b]['Children']):
-                    self.basin_index['Level'][l]['Basin'][b]\
-                        ['Children'] = \
-                        list(set(self.basin_index['Level'][l]\
-                                     ['Basin'][b]['Children']))
-
-
-    def GgetParentsAndChildren(self):
-        '''
-        Find the parent of each node.
-        '''
-        for m in self.minima_index['Index']:
-            for l in self.basin_index['Level']:
-                if l == 1: continue
-                b = self.minima_index['Index'][m]['Basin']['Level'][l]
-                if b:
-                    #if l - 1 != 0:
-                    
                     p = self.minima_index['Index'][m]['Basin']\
                         ['Level'][l-1]
                     self.basin_index['Level'][l]['Basin'][b]\

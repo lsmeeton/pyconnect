@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
     disc.ReNumberBasins()
     print 'Calculating Parents and Children\n'
-    disc.GgetParentsAndChildren()
+    disc.GetParentsAndChildren()
     disc.GetNodeSize()
     disc.DumpNumbers()
     disc.DumpSizes()

@@ -1,17 +1,11 @@
 import unittest
-# import sys
-# sys.path.append('/home/lewis/PyConnect/pyconnect/source/')
-#import mymodule
 
-# from Disconnect import Disconnect
 from pyconnect.disconnectplot import DisconnectPlot
-from pyconnect.keyword import Keywords
-
+from pyconnect.keywords import Keywords
 
 class TestDisconnect(unittest.TestCase):
 
     def setUp(self):
-        print 'hello'
         kw = Keywords()
         self.disc = DisconnectPlot(kw)
         self.disc.InitialiseMin()
