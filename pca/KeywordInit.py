@@ -31,6 +31,8 @@ class Keyword():
         
         self.points = None  # Location of unformatted-FORTRAN (yawn) co-ordinate
                             # file
+        self.conv_fname = None  # Name of file to store converted .npy configuration
+                                # space 
         
         # basis = 'dihedral'
         self.basis = None
@@ -100,6 +102,7 @@ class Keyword():
         self.min_file = str(self.min_file)
         self.n_atoms = int(self.n_atoms)
         self.points = str(self.points)
+        self.conv_fname = str(self.conv_fname)
         self.basis = str(self.basis)
         if self.beta: self.beta = float(self.beta)
         self.PC_coords_dir_name = str(self.PC_coords_dir_name)

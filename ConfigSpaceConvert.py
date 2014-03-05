@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-
-from PCAprint import PCAprint
+from pca.PCAprint import PCAprint
+# from PCAprint import PCAprint
 #from PCA import PCA
 #from PCAprep import MyPCAprep
 #from PCAinit import PCAinit
-from KeywordInit import Keyword
-import numpy as np
+from pca.KeywordInit import Keyword
+# import numpy as np
 
 if __name__ == '__main__':
     
@@ -14,7 +14,8 @@ if __name__ == '__main__':
     kw = Keyword(inpt)
     pca = PCAprint(kw)
     
-    pca.DirectoryCheck()
+#     pca.DirectoryCheck()
+#     kw.FileCheck('config_space.npy')
     pca.BasisCheck()
     pca.ShapeCheck()
     pca.ReadMinimaIndex()
@@ -39,4 +40,4 @@ if __name__ == '__main__':
         print 'Done'
         
 
-    pca.SaveConfigSpace()
+    pca.SaveConfigSpace(kw.conv_fname)

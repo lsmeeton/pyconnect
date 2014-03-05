@@ -188,5 +188,5 @@ if __name__ == '__main__':
     pca.BasisCheck()
     
     pca.ReadMinimaIndex()
-    pca.ReadConfigurationSpace()
+    pca.ReadConfigurationSpaceFORTRAN()
     pca.ShapeCheck()

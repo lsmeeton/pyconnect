@@ -6,7 +6,7 @@ setup(
     author='Lewis Smeeton',
     author_email='lcs137@bham.ac.uk',
     packages=['pca'],# 'pca.test'],
-    scripts=['pca/PCArun.py'],#,'bin/wash-towels.py'],
+    scripts=['PCArun.py','ConfigSpaceConvert.py'],#,'bin/wash-towels.py'],
     #url='http://pypi.python.org/pypi/Pyconnect/',
     #license='LICENSE.txt',
     #description='Useful towel-related stuff.',

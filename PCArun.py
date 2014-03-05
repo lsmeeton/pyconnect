@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-from PCAprint import PCAprint
+from pca.PCAprint import PCAprint
 #from PCA import PCA
 #from PCAprep import MyPCAprep
 #from PCAinit import PCAinit
-from KeywordInit import Keyword
+from pca.KeywordInit import Keyword
 
 if __name__ == '__main__':
     

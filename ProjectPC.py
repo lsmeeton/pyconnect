@@ -13,7 +13,7 @@ import numpy as np
 import os
 import sys
 #from PCAprep import MyPCAprep as PCA
-from PCAprint import PCAprint
+from pca.PCAprint import PCAprint
 
 __metaclass__ = type
 

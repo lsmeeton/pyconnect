@@ -97,11 +97,11 @@ class PCAprint(PCA):
         np.savez(self.kw.PC_coords_dir_name +
                  '/mu_sigma.npz', self.config_mu, self.config_sigma)
         
-    def SaveConfigSpace(self):
+    def SaveConfigSpace(self,fname="config_space.npy"):
         '''
         save self.config_space as a .npy file called "config_space.npy"
         '''
-        np.save('config_space.npy',self.config_space)
+        np.save(fname,self.config_space)
         
     def PrintStructureXYZ(self,structure):
         '''

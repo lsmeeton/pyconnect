@@ -52,7 +52,6 @@ class PCA(MyPCAprep):
     
     def runPCA(self):
         
-
         n, m = self.config_space.shape
         if n<m:
             raise RuntimeError('we assume data in a is organised with numrows>numcols')
