@@ -30,6 +30,7 @@ class Disconnect(object):
         self.CountMin()
         self.CountTS()
         self.RemoveThreshold()
+        self.RemoveInvalidTS()
         self.RemoveUnderConnect()
         self.RemoveDisjoint()
         self.InitialiseBasin()
@@ -484,6 +485,31 @@ class Disconnect(object):
 
     def RemoveInvalidTS(self):
         '''
+        Removes Transition states which have invalid energy
+        or do not point to a minimum
+        '''
+        dm, dt = self._RemoveBadTS()
+        
+        if dm or dt:
+            print "Transition states indices with energy lower than the minima they connect:"
+            print [t for t in list(set(dt))]
+        
+        dt = self._RemoveUnderConnectedTS(dm, dt)
+                
+        if dm or dt:
+            dm = list(set(dm)) # Remove duplicates
+            dt = list(set(dt))
+            
+            for t in dt: 
+                del self.ts_index['Index'][t]
+                
+            for m in dm:
+                del self.minima_index['Index'][m]
+                
+            print "%d Transition states and %d minima were invalid and had to be removed"%(len(dt), len(dm))
+            
+    def _RemoveBadTS(self):
+        '''
         Removes Transition states which have a lower energy than either
         of the two minima they connect
         '''
@@ -508,17 +534,24 @@ class Disconnect(object):
                 dt.append(t)
                 dm.append(m2)
                 
-        if dm or dt:
-            dm = list(set(dm)) # Remove duplicates
-            dt = list(set(dt))
+        return dm, dt
+    
+    def _RemoveUnderConnectedTS(self,dm, dt):
+        '''
+        Remove TS which point to minima which will be removed by
+        _RemoveBadTS method
+        '''
+        for t in self.ts_index['Index']:
             
-            for t in dt: 
-                del self.ts_index['Index'][t]
+            m1 = self.ts_index['Index'][t]['Min1']
+            m2 = self.ts_index['Index'][t]['Min2']
+            
+            if m1 in set(dm): 
+                dt.append(t)
+            if m2 in set(dm): 
+                dt.append(t)
                 
-            for m in dm:
-                del self.minima_index['Index'][m]
-                
-            print "%d Transition states and %d minima were invalid and had to be removed"%(len(dt), len(dm))
+        return dt
             
     def RemoveUnderConnect(self):
         '''
