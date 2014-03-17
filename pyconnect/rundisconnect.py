@@ -12,7 +12,7 @@ if __name__ == '__main__':
     print '--------------- ------\n'
     print 'Reading keyword file\n'
     
-    kw = Keywords(dinfo="/home/lewis/DISCONNECTIO/DISCONNECTinput/BLN69/dinfo")
+    kw = Keywords()
 
     disc = DisconnectPlot(kw)
     

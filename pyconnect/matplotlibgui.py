@@ -96,6 +96,12 @@ class DGCanvasFrame():
             label = str(self.disc.kw.idmin['Min'][i])
             # Find location of minima
             level_list = []
+            try:
+                self.disc.minima_index['Index'][i]
+            except KeyError:
+                print "Minimum " + label + " not present"
+                continue
+            
             for l in self.disc.minima_index['Index'][i]['Basin']['Level']:
                 b = self.disc.minima_index['Index'][i]['Basin']['Level'][l]
                 if b: level_list.append(l)
@@ -108,6 +114,7 @@ class DGCanvasFrame():
             else:
                 z = self.disc.basin_index['Level'][l]['Energy']      
             self.ax.text(x,z,label)
+
             
     def IdentifyBasinSize(self):
         '''
