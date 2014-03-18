@@ -88,6 +88,26 @@ The `dinfo` file can contain a number of keywords, five of which are compulsory;
 	Specifies the energy of the highest level on the energy axis.
 
 5. `LEVELS <n>`
+
 	The number of levels at which to perorm the basin analysis.
 
 
+In order to plot a metric disconnectivity graph the following keywords must be used;
+
+1.  `METRIC <data_file>`
+	
+	Specifies filename for metric info for producing 2d metric disconnectivity graphs
+
+	File Format: Data organised into two coloumns
+
+	First Coloumn: Minima index
+
+	Second Coloumn: Metric value of minima
+
+	Lines beginning with `#` will be ignored
+
+2. `METRIC3D <data_file1> <data_file2>`
+	
+	Specifies filenames for metric info for producing 3d metric disconnectivity graphs
+
+	File format: same as for `METRIC` keyword, both files must conform to file format
